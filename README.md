@@ -15,4 +15,4 @@
 Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/Neichoo/GRUPO6-2024-PROYINF/wiki)
 
 # Videos:
-[Presentación del Cliente](https://youtu.be/abJau21SDIk?si=tvCJ4hAYGWEmOwB1)
+* [Presentación del Cliente](https://youtu.be/abJau21SDIk?si=tvCJ4hAYGWEmOwB1)
