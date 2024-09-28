@@ -14,5 +14,12 @@
 # Wiki:
 Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/Neichoo/GRUPO6-2024-PROYINF/wiki)
 
+# Instrucciones para levantar el proyecto localmente:
+* Verificar que Django esté instalado, mediante el comando "python -m django --version", si no está instalado, instalarlo con
+el comando "pip install django". Si la versión de Django no es la 5.1.1, actualizarla mediante "pip install --upgrade django".
+* Luego descargar el proyecto, mediante la terminar "cmd", acceder a la ubicación del proyecto, especialmente a la carpeta "GRUPO62024PROYINF".
+* Posteriormente para levantar la página, se escribe por terminal el comando "python manage.py runserver".
+* Finalmente se puede acceder mediante el navegador escribiendo la url "http://127.0.0.1:8000/".
+
 # Videos:
 * [Presentación del Cliente](https://youtu.be/abJau21SDIk?si=tvCJ4hAYGWEmOwB1)
