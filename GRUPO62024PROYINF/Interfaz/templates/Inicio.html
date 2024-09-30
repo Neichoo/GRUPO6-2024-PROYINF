@@ -7,21 +7,22 @@
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Home.css' %}"> <!-- Mover aquí -->
 </head>
 
 <body>
     <nav>
-        <link rel="stylesheet" href="{% static 'CSS/Home.css' %}">
-        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIATemplate" class="IconoVIGIFIA">
+        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
-            <li><a href="/Inicio/">Inicio</a></li>
-            <li><a href="/Boletines/">Boletínes</a></li>
-            <li><a href="/SobreVIGIFIA/">Sobre VIGIFIA</a></li>
-            <li><a href="/Contacto/">Contacto</a></li>
-            <li class="acceso-empleado"><a href="/Login/">Acceso Empleado</a></li>
+            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
+            <li><a href="{% url 'Boletines' %}">Boletínes</a></li>
+            <li><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
+            <li><a href="{% url 'Contacto' %}">Contacto</a></li>
+            <li class="acceso-empleado"><a href="{% url 'Login' %}">Acceso Empleado</a></li>
         </ul>
     </nav>
+
     <footer>
         <div class="footer-content">
             <p>Visita nuestro GitHub: 
@@ -32,6 +33,6 @@
             <p>&copy; 2024 VIGIFIA</p>
         </div>
     </footer>
-    
 </body>
 </html>
+

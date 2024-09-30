@@ -1,10 +1,13 @@
 from django.urls import path
+from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    path('Inicio/', views.inicio),
-    path('Boletines/', views.boletines),
-    path('SobreVIGIFIA/', views.sobre_vigifia),
-    path('Contacto/', views.contacto),
-    path('Login/', views.login),
+    path('Inicio/', views.Inicio, name='Inicio'),
+    path('Boletines/', views.Boletines, name='Boletines'),
+    path('SobreVIGIFIA/', views.Sobre_vigifia, name='Sobre_vigifia'),
+    path('Contacto/', views.Contacto, name='Contacto'),
+    path('Login/', views.Login_form, name='Login'), 
+    path('Login_view/', views.Login_view, name='Login_view'),
+    path('PanelDeControl/', views.PanelDeControl, name='PanelDeControl'),
 ]

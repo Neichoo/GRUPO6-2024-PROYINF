@@ -3,22 +3,46 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VIGIFIA: Inicio</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Login.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
 </head>
 
 <body>
     <nav>
-        <link rel="stylesheet" href="{% static 'CSS/Home.css' %}">
-        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIATemplate" class="IconoVIGIFIA">
+        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
-            <li><a href="/Inicio/">Inicio</a></li>
-            <li class="acceso-empleado"><a href="/Login/">Acceso Empleado</a></li>
+            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
         </ul>
     </nav>
+
+    <section>
+        <div class="Login">
+            <h2>Iniciar Sesión</h2>
+            <form method="POST" action="{% url 'Login_view' %}">
+                {% csrf_token %}
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </section>
+
     <footer>
         <div class="footer-content">
             <p>Visita nuestro GitHub: 
@@ -29,6 +53,9 @@
             <p>&copy; 2024 VIGIFIA</p>
         </div>
     </footer>
-    
 </body>
 </html>
+
+
+
+
