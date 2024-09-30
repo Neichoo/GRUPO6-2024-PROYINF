@@ -1,0 +1,23 @@
+footer {
+    background-color: #2b3b4e;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-content {
+    display: inline-block;
+}
+
+.footer-content p {
+    margin: 0;
+    padding: 5px;
+}
+
+.footer-content img {
+    vertical-align: middle;
+    margin-right: 5px;
+}

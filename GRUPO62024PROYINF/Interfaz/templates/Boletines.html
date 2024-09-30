@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>VIGIFIA: Boletines</title>
+    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+</head>
+
+<body>
+    <nav>
+        <link rel="stylesheet" href="{% static 'CSS/Home.css' %}">
+        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIATemplate" class="IconoVIGIFIA">
+        <span class="nombreVIGIFIA">VIGIFIA</span>
+        <ul>
+            <li><a href="/Inicio/">Inicio</a></li>
+            <li><a href="/Boletines/">Boletínes</a></li>
+            <li><a href="/SobreVIGIFIA/">Sobre VIGIFIA</a></li>
+            <li><a href="/Contacto/">Contacto</a></li>
+            <li class="acceso-empleado"><a href="/Login/">Acceso Empleado</a></li>
+        </ul>
+    </nav>
+    <footer>
+        <div class="footer-content">
+            <p>Visita nuestro GitHub: 
+                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
+                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
+                </a>
+            </p>
+            <p>&copy; 2024 VIGIFIA</p>
+        </div>
+    </footer>
+    
+</body>
+</html>
