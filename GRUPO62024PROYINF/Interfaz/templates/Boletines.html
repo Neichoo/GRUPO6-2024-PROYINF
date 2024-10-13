@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/BoletinB.css' %}">
 </head>
 
 <body>
     <nav>
-        <link rel="stylesheet" href="{% static 'CSS/Home.css' %}">
         <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIATemplate" class="IconoVIGIFIA">
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
@@ -22,6 +22,33 @@
             <li class="acceso-empleado"><a href="{% url 'Login' %}">Acceso Empleado</a></li>
         </ul>
     </nav>
+
+    <form method="GET" action="">
+        {{ form.as_p }}
+
+        <div class="filter-container">
+            <label for="filter">Filtrar por Tag:</label>
+            <select id="filter" name="filter">
+                <option value="">Selecciona un tag</option>
+                {% for tag in tags_conteo %}
+                    <option value="{{ tag.nombre }}">{{ tag.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+        <div>
+            <h4>Tags disponibles</h4>
+            <ul class="tag-list">
+            {% for tag in tags_conteo %}
+                <li>{{ tag.nombre }} ({{ tag.num_boletines }})</li>
+            {% endfor %}
+            </ul>
+        </div>
+    
+        <button type="submit">Buscar</button>
+    </form>
+    
+
     <footer>
         <div class="footer-content">
             <p>Visita nuestro GitHub: 

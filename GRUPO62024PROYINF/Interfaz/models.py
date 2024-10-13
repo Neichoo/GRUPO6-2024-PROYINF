@@ -7,11 +7,12 @@ class Tag(models.Model):
     def __str__(self):
         return self.nombre
     
-class Boletines(models.Model):
+class Boletin(models.Model):
     id_boletin = models.AutoField(primary_key=True)
     nombre_boletin = models.CharField(max_length=100)
-    tags_boletin = models.ManyToManyField(Tag, related_name='boletines')
-    fecha_boletin = models.DateField(max_length=50)
+    tags_boletin = models.ManyToManyField(Tag)
+    fecha_boletin = models.DateField()
     def __str__(self):
         return self.nombre_boletin
-    
+
+
