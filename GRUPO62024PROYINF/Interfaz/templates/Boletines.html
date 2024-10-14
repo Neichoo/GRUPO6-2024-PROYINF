@@ -47,7 +47,25 @@
     
         <button type="submit">Buscar</button>
     </form>
-    
+
+    <ul>
+        {% for boletin in boletines %}
+            <li>
+                <h2>{{ boletin.nombre_boletin }}</h2>
+                <p><strong>Fecha de publicación:</strong> {{ boletin.fecha_boletin }}</p>
+                <p><strong>Tags:</strong> 
+                    {% for tag in boletin.tags_boletin.all %}
+                        {{ tag.nombre }},
+                    {% endfor %}
+                </p>
+                <p><strong>Ver PDF:</strong> 
+                    <a href="{{ boletin.url_pdf.url }}" target="_blank">Descargar PDF</a>
+                </p>
+            </li>
+        {% empty %}
+            <p>No hay boletines disponibles.</p>
+        {% endfor %}
+    </ul>
 
     <footer>
         <div class="footer-content">

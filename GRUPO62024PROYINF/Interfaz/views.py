@@ -9,12 +9,16 @@ from django.db.models import Q, Count
 
 def Inicio(request):
     return render(request, "Inicio.html")
+
 def Sobre_vigifia(request):
     return render(request, "SobreVIGIFIA.html")
+
 def Contacto(request):
     return render(request, "Contacto.html")
+
 def Login_form(request):
     return render(request, "Login.html")
+
 def Login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -27,9 +31,11 @@ def Login_view(request):
             messages.error(request, 'Usuario o contraseña incorrectos.')
     
     return render(request, 'Login.html')
+
 @login_required(login_url='/Login/')
 def PanelDeControl(request):
     return render(request, "PanelDeControl.html")
+
 def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
     boletines = Boletin.objects.all()
@@ -47,7 +53,7 @@ def Boletines(request):
             boletines = boletines.filter(Q(nombre_boletin__icontains=palabras_clave))
         # Filtrar por tag seleccionado
         if selected_tag:
-            boletines = boletines.filter(tags__nombre=selected_tag)  # Filtrar por el tag seleccionado
+            boletines = boletines.filter(tags_boletin__nombre=selected_tag)  # Filtrar por el tag seleccionado
         # Filtrar por rango de fechas
         if fecha_inicio:
             boletines = boletines.filter(fecha_boletin__gte=fecha_inicio)
