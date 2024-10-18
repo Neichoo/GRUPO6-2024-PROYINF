@@ -1,12 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
 
 class Tag(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     def __str__(self):
         return self.nombre
-    
+
+class FuentesInfo(models.Model):
+    id_fuente = models.AutoField(primary_key=True)
+    url = models.CharField(max_length=100, unique=True)
+    tags = models.ManyToManyField(Tag)
+    def __str__(self):
+        return self.url
+
 class Boletin(models.Model):
     id_boletin = models.AutoField(primary_key=True)
     nombre_boletin = models.CharField(max_length=100)
@@ -16,3 +24,15 @@ class Boletin(models.Model):
     
     def __str__(self):
         return self.nombre_boletin
+
+class Empleado(models.Model):
+    EQUIPO_U3I = 'EquipoU3I'
+    BIBLIOTECOLOGO = 'Bibliotecologo/a'
+    
+    TIPO_CHOICES = [
+        (EQUIPO_U3I, 'EquipoU3I'),
+        (BIBLIOTECOLOGO, 'Bibliotecologo/a'),
+    ]
+    
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)

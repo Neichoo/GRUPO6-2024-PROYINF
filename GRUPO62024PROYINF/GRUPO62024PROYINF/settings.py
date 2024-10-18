@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'GRUPO62024PROYINF.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'Proyecto.db',
+        'NAME': os.path.join(BASE_DIR, 'Proyecto.sqlite3'),  # Asegúrate de que el nombre sea 'Proyecto.db'
     }
 }
 

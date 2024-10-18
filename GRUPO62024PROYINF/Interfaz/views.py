@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import CustomUserCreationForm
-from .models import Boletin, Tag
+from .models import Boletin, Tag, Empleado, FuentesInfo
 from .forms import BusquedaBoletinForm
 from django.db.models import Q, Count
 
@@ -26,15 +25,64 @@ def Login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('PanelDeControl')  # Redirige a la página principal o donde desees
+            try:
+                # Obtener el tipo del empleado
+                empleado = Empleado.objects.get(usuario=user)
+                if empleado.tipo == Empleado.EQUIPO_U3I:
+                    return redirect('PanelDeControl')  # Redirige al template del Equipo U3I
+                elif empleado.tipo == Empleado.BIBLIOTECOLOGO:
+                    return redirect('Contacto')  # Redirige al template del Bibliotecólogo/a
+            except Empleado.DoesNotExist:
+                messages.error(request, 'Empleado no registrado.')
+
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
     
     return render(request, 'Login.html')
 
+#FUENTES
+@login_required(login_url='/Login/')
+def Fuentes(request):
+    fuentes = FuentesInfo.objects.all()
+    
+    if request.method == 'POST':
+        if 'agregar_fuente' in request.POST:
+            url = request.POST.get('url')
+            nueva_fuente = FuentesInfo(url=url)
+            nueva_fuente.save()
+            return redirect('Fuentes')
+        
+        elif 'editar_fuente' in request.POST: 
+            id_fuente = request.POST.get('id_fuente')
+            fuente = get_object_or_404(FuentesInfo, id_fuente=id_fuente)
+            fuente.url = request.POST.get('url')
+            fuente.save()
+            return redirect('Fuentes')
+        
+        elif 'eliminar_fuente' in request.POST:
+            id_fuente = request.POST.get('id_fuente')
+            fuente = get_object_or_404(FuentesInfo, id_fuente=id_fuente)
+            fuente.delete()
+            return redirect('Fuentes')
+
+    return render(request, 'Fuentes.html', {'fuentes': fuentes})
+
+#Acceso Bilbiotecolog@s
+@login_required(login_url='/Login/')
+def AccesoBiblio(request):
+    return render(request, "AccesoBiblio.html")
+
+@login_required(login_url='/Login/')
+def Estadisticas(request):
+    return render(request, "Estadisticas.html")
+
 @login_required(login_url='/Login/')
 def PanelDeControl(request):
     return render(request, "PanelDeControl.html")
+
+def Logout_view(request):
+    logout(request)
+    return redirect('Login')
 
 def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
