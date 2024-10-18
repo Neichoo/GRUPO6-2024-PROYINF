@@ -31,7 +31,7 @@ def Login_view(request):
                 if empleado.tipo == Empleado.EQUIPO_U3I:
                     return redirect('PanelDeControl')  # Redirige al template del Equipo U3I
                 elif empleado.tipo == Empleado.BIBLIOTECOLOGO:
-                    return redirect('Contacto')  # Redirige al template del Bibliotecólogo/a
+                    return redirect('AccesoBiblio')  # Redirige al template del Bibliotecólogo/a
             except Empleado.DoesNotExist:
                 messages.error(request, 'Empleado no registrado.')
 
