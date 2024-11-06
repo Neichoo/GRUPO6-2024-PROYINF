@@ -5,20 +5,19 @@
     <meta charset="UTF-8">
     <title>VIGIFIA: Bibliotecolog@s</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/BiblioInicio.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Login.css' %}">
 </head>
 <body>
     <nav>
         <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
-            <li><a>Fuentes</a></li>
+            <li><a href="{% url 'Fuentes' %}">Fuentes</a></li>
             <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
         </ul>
     </nav>
-    <h1>Bienvenida, Bibliotecólog@</h1>
+    <h1>Bienvenid@, Bibliotecólog@</h1>
     <p>Aquí se mostrará contenido específico para bibliotecólog@s.</p>
     <footer>
         <div class="footer-content">

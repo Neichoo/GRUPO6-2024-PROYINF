@@ -18,30 +18,31 @@
             <li><a href="{% url 'Inicio' %}">Inicio</a></li>
         </ul>
     </nav>
+    <div class="login-page">
+        <section class="login-container">
+            <div class="Login">
+                <h2>Iniciar Sesión</h2>
+                <form method="POST" action="{% url 'Login_view' %}">
+                    {% csrf_token %}
+                    <label for="username">Usuario:</label>
+                    <input type="text" id="username" name="username" required>
 
-    <section>
-        <div class="Login">
-            <h2>Iniciar Sesión</h2>
-            <form method="POST" action="{% url 'Login_view' %}">
-                {% csrf_token %}
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" required>
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" name="password" required>
 
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
+                    <button type="submit">Iniciar Sesión</button>
+                </form>
 
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-
-            {% if messages %}
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </div>
-    </section>
+                {% if messages %}
+                    <ul class="login-messages">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </section>
+    </div>
 
     <footer>
         <div class="footer-content">

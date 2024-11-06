@@ -5,51 +5,20 @@
     <meta charset="UTF-8">
     <title>VIGIFIA: Fuentes</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Fuentes.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Login.css' %}">
-    <!--<link rel="stylesheet" href="{% static 'CSS/Fuentes.css' %}">-->
 </head>
 <body>
     <nav>
         <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
-            <li><a href="{% url 'Fuentes' %}">Fuentes</a></li>
-            <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
+            <li><a href="{% url 'AccesoBiblio' %}">Inicio</a></li>
             <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
         </ul>
     </nav>
 
-    <div class="fuentes-container">
-        <h2>Fuentes de Información</h2>
-
-        <form method="POST" action="{% url 'Fuentes' %}">
-            {% csrf_token %}
-            <label for="url">Agregar URL:</label>
-            <input type="url" id="url" name="url" required>
-            <button type="submit" name="agregar_fuente">Agregar Fuente</button>
-        </form>
-
-        <ul>
-            {% for fuente in fuentes %}
-                <li>
-                    <form method="POST" action="{% url 'Fuentes' %}" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="id_fuente" value="{{ fuente.id_fuente }}">
-                        <input type="url" name="url" value="{{ fuente.url }}" required>
-                        <button type="submit" name="editar_fuente">Guardar</button>
-                    </form>
-                    <a href="{{ fuente.url }}">{{ fuente.url }}</a>
-                    <form method="POST" action="{% url 'Fuentes' %}" style="display:inline;">
-                        {% csrf_token %}
-                        <input type="hidden" name="id_fuente" value="{{ fuente.id_fuente }}">
-                        <button type="submit" name="eliminar_fuente">Eliminar</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    
 
     <footer>
         <div class="footer-content">

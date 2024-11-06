@@ -1,58 +1,178 @@
+body {
+    background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
 form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: transparent;
     background-color: #fff;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin: 60px auto;
-    max-width: 600px;
-    transition: box-shadow 0.3s ease;
+    max-width: 900px;
 }
 
-form h4 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-}
-
-.tag-list {
-    padding-left: 20px;
-}
-
-.tag-list li {
-    background-color: #ecf0f1;
-    margin: 10px 0;
+form input[type="text"] {
     padding: 10px;
+    border: 1px solid #bdc3c7;
     border-radius: 4px;
-    transition: background-color 0.3s;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
 }
 
-.tag-list li:hover {
-    background-color: #bdc3c7;
-}
-
-button[type="submit"] {
-    background-color: #3498db; 
+button[type="submit"], button[type="reset"] {
+    background-color: #3498db;
     color: white;
     border: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    display: block;
-    margin: 20px auto;
     font-size: 16px;
 }
 
 button[type="submit"]:hover {
     background-color: #2980b9;
 }
-.filter-container {
-    margin-bottom: 20px;
+
+button[type="reset"] {
+    background-color: #ff9933;
+    margin-left: 10px;
 }
 
-.filter-container select {
+button[type="reset"]:hover {
+    background-color: #e68a00;
+}
+.filter-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #ff9933;
+    color: white;
+    border: none;
     padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #bdc3c7;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.filter-sidebar {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    border-left: 2px solid #004466;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.filter-sidebar h3 {
+    font-size: 18px;
+    color: #004466;
+}
+
+.filter-sidebar select, .filter-sidebar button {
     width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+}
+
+.boletines-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    background: transparent;
+}
+
+.boletines-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.boletines-container ul li {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    position: relative;
+}
+
+.boletines-container ul li:not(:last-child) {
+    border-bottom: 2px solid #3498db; 
+}
+
+.boletines-container ul li:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.boletines-container ul li h2 {
+    font-size: 24px;
+    color: #004466;
+    margin-bottom: 10px;
+}
+
+.boletines-container ul li p {
     font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.boletines-container ul li p strong {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.boletines-container ul li a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.boletines-container ul li a:hover {
+    color: #2980b9;
+}
+
+.boletines-container ul li a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.boletines-container ul li a:hover {
+    background-color: #2980b9;
 }

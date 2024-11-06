@@ -15,5 +15,4 @@ urlpatterns = [
     path('Fuentes/', views.Fuentes, name='Fuentes'),
     path('Estadisticas/', views.Estadisticas, name='Estadisticas'),
     path('AccesoBiblio/', views.AccesoBiblio, name='AccesoBiblio'),
-    
 ]
