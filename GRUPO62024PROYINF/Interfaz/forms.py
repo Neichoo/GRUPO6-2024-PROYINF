@@ -21,3 +21,10 @@ class BusquedaBoletinForm(forms.Form):
         required=False,
         label="Ordenar por fecha"
     )
+
+class BusquedaFuenteForm(forms.Form):
+    query = forms.CharField(
+        required=False, 
+        label="Buscar", 
+        widget=forms.TextInput(attrs={'placeholder': 'Buscar fuentes...'})
+    )

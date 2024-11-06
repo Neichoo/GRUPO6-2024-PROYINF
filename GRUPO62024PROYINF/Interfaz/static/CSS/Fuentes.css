@@ -1,6 +1,0 @@
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
-}

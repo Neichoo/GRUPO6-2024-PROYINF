@@ -9,9 +9,23 @@ class Tag(models.Model):
         return self.nombre
 
 class FuentesInfo(models.Model):
+    ACTIVO = 'Activo'
+    DESACTIVADO = 'Desactivado'
+    ESTADO_CHOICES = [
+        (ACTIVO, 'Activo'),
+        (DESACTIVADO, 'Desactivado'),
+    ]
+
     id_fuente = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=100, default="")
     url = models.CharField(max_length=100, unique=True)
     tags = models.ManyToManyField(Tag)
+    estado = models.CharField(
+        max_length=12,
+        choices=ESTADO_CHOICES,
+        default=ACTIVO,
+    )
+    descripcion = models.CharField(max_length=500, default="", blank=True, null=True)
     def __str__(self):
         return self.url
 

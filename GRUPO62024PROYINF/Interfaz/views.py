@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import Boletin, Tag, Empleado, FuentesInfo
-from .forms import BusquedaBoletinForm
+from .forms import BusquedaBoletinForm, BusquedaFuenteForm
 from django.db.models import Q
 
 
@@ -45,10 +45,34 @@ def Login_view(request):
             messages.error(request, 'Usuario o contraseña incorrectos.')
     return render(request, 'Login.html')
 
-#FUENTES
+#FUENTES Bilbiotecolog@s
 @login_required(login_url='/Login/')
-def Fuentes(request):
-    return render(request, "Fuentes.html")
+def FuentesBiblio(request):
+    form = BusquedaFuenteForm(request.GET or None)
+    fuentes = FuentesInfo.objects.filter(estado='Activo')
+    tags_conteo = Tag.objects.all()
+    if form.is_valid():
+        query = form.cleaned_data.get('query')
+        # Filtrar por palabras clave en nombre del boletín
+        if query:
+            fuentes = fuentes.filter(
+                Q(titulo__icontains=query)
+            )
+        # Filtrar por tag seleccionado en el menú desplegable
+        tag_filter = request.GET.get('filter')
+        if tag_filter:
+            fuentes = fuentes.filter(tags__nombre=tag_filter)
+
+    return render(request, 'FuentesBiblio.html', {
+        'form': form,
+        'fuentes': fuentes,
+        'tags_conteo': tags_conteo
+    })
+
+#FUENTES U3I
+@login_required(login_url='/Login/')
+def FuentesU3I(request):
+    return render(request, "FuentesU3I.html")
 
 #Acceso Bilbiotecolog@s
 @login_required(login_url='/Login/')
@@ -71,26 +95,30 @@ def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
     boletines = Boletin.objects.all()
     tags_conteo = Tag.objects.all()
+
+    # Aplicar filtros si el formulario es válido
     if form.is_valid():
         query = form.cleaned_data.get('query')
         fecha_desde = form.cleaned_data.get('fecha_desde')
         fecha_hasta = form.cleaned_data.get('fecha_hasta')
         ordenar_por = form.cleaned_data.get('ordenar_por')
-        # Filtrar por palabras clave en nombre del boletín
+        tag_filter = form.cleaned_data.get('filter')  # Si 'filter' es un campo en el formulario
+
+        # Filtrar por palabras clave en el nombre del boletín
         if query:
-            boletines = boletines.filter(
-                Q(nombre_boletin__icontains=query)
-            )
-        # Filtrar por tag seleccionado en el menú desplegable
-        tag_filter = request.GET.get('filter')
+            boletines = boletines.filter(Q(nombre_boletin__icontains=query))
+        
+        # Filtrar por tag seleccionado si está presente
         if tag_filter:
             boletines = boletines.filter(tags_boletin__nombre=tag_filter)
-        # Filtrar por rango de fechas
+        
+        # Filtrar por rango de fechas si están definidos
         if fecha_desde:
             boletines = boletines.filter(fecha_boletin__gte=fecha_desde)
         if fecha_hasta:
             boletines = boletines.filter(fecha_boletin__lte=fecha_hasta)
-        # Ordenar por fecha
+        
+        # Ordenar resultados por fecha
         if ordenar_por == 'asc':
             boletines = boletines.order_by('fecha_boletin')
         elif ordenar_por == 'desc':

@@ -15,27 +15,52 @@
         <span class="nombreVIGIFIA">VIGIFIA</span>
         <ul>
             <li><a href="{% url 'Inicio' %}">Inicio</a></li>
-            <li><a href="{% url 'Boletines' %}">Boletínes</a></li>
+            <li><a href="{% url 'Boletines' %}">Boletines</a></li>
             <li><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
             <li><a href="{% url 'Contacto' %}">Contacto</a></li>
             <li class="acceso-empleado"><a href="{% url 'Login' %}">Acceso Empleado</a></li>
         </ul>
     </nav>
 
-    <form method="GET" action="">
-        {{ form.as_p }}
-        <div class="filter-sidebar" id="filterSidebar">
+    <div class="search-bar-container">
+        <form method="GET" action="">
+            {{ form.query }}
+            <div class="button-group">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
+        <div class="button-group">
+            <button type="reset" onclick="window.location.href = window.location.pathname;">Reiniciar filtros</button>
+            <button class="filter-toggle" type="button" onclick="toggleFilterSidebar()">Filtrar</button> <!-- Cambié el tipo a "button" -->
+        </div>
+    </div>
+
+    <div class="filter-sidebar hide" id="filterSidebar">
+        <h3>Filtros de Búsqueda</h3>
+        <form method="GET" action="{% url 'Boletines' %}">
             <label for="filter">Filtrar por Tag:</label>
             <select id="filter" name="filter">
                 <option value="">Selecciona un tag</option>
                 {% for tag in tags_conteo %}
-                    <option value="{{ tag.nombre }}">{{ tag.nombre }}</option>
+                    <option value="{{ tag.nombre }}" {% if tag.nombre == request.GET.filter %}selected{% endif %}>{{ tag.nombre }}</option>
                 {% endfor %}
             </select>
-        </div>
-        <button type="submit">Buscar</button>
-        <button type="reset" onclick="window.location.href = window.location.pathname;">Reiniciar filtros</button>
-    </form>
+            
+            <label for="dateFrom">Desde:</label>
+            <input type="date" id="dateFrom" name="fecha_desde" value="{{ form.fecha_desde.value }}">
+            
+            <label for="dateTo">Hasta:</label>
+            <input type="date" id="dateTo" name="fecha_hasta" value="{{ form.fecha_hasta.value }}">
+            
+            <label for="orderBy">Ordenar por fecha:</label>
+            <select id="orderBy" name="ordenar_por">
+                <option value="asc" {% if form.ordenar_por.value == "asc" %}selected{% endif %}>Fecha Ascendente</option>
+                <option value="desc" {% if form.ordenar_por.value == "desc" %}selected{% endif %}>Fecha Descendente</option>
+            </select>
+
+            <button type="submit" class="boton-filtro">Aplicar Filtros</button>
+        </form>
+    </div>
 
     <div class="boletines-container">
         <ul>
@@ -44,9 +69,7 @@
                     <h2>{{ boletin.nombre_boletin }}</h2>
                     <p><strong>Fecha de publicación:</strong> {{ boletin.fecha_boletin }}</p>
                     <p><strong>Tags:</strong> 
-                        {% for tag in boletin.tags_boletin.all %}
-                            {{ tag.nombre }},
-                        {% endfor %}
+                        {{ boletin.tags_boletin.all|join:", " }}
                     </p>
                     <p><strong>Ver PDF:</strong> 
                         <a href="{{ boletin.url_pdf.url }}" target="_blank">Descargar PDF</a>
@@ -68,5 +91,7 @@
             <p>&copy; 2024 VIGIFIA</p>
         </div>
     </footer>
+    
+    <script src="{% static 'JS/filterSidebar.js' %}"></script>
 </body>
 </html>

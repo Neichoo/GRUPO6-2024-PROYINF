@@ -12,7 +12,8 @@ urlpatterns = [
     path('Login_view/', views.Login_view, name='Login_view'),
     path('PanelDeControl/', views.PanelDeControl, name='PanelDeControl'),
     path('logout/', views.Logout_view, name='logout'),
-    path('Fuentes/', views.Fuentes, name='Fuentes'),
+    path('FuentesBiblio/', views.FuentesBiblio, name='FuentesBiblio'),
+    path('FuentesU3I/', views.FuentesU3I, name='FuentesU3I'),
     path('Estadisticas/', views.Estadisticas, name='Estadisticas'),
     path('AccesoBiblio/', views.AccesoBiblio, name='AccesoBiblio'),
 ]
