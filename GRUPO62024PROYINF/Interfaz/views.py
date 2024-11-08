@@ -73,7 +73,7 @@ def FuentesBiblio(request):
 @login_required(login_url='/Login/')
 def FuentesU3I(request):
     form = BusquedaFuenteForm(request.GET or None)
-    fuentes = FuentesInfo.objects.filter(estado='Activo')
+    fuentes = FuentesInfo.objects.all()
     tags_conteo = Tag.objects.all()
     if form.is_valid():
         query = form.cleaned_data.get('query')
@@ -104,12 +104,24 @@ def IngresoFuente(request):
     #tags = request.POST['tags']
     estado = request.POST['estado']
     descripcion = request.POST['descripcion']
-    fuente = FuentesInfo.objects.create(
-        titulo = titulo,
-        url = url,
-        estado = estado,
-        descripcion = descripcion,
-    )
+
+    try:
+        fuente = FuentesInfo.objects.get(url = url)
+        existeFuente = True
+    except FuentesInfo.DoesNotExist:
+        existeFuente = False
+
+    if existeFuente == False:
+        messages.success(request, "Fuente registrada exitosamente")
+        fuente = FuentesInfo.objects.create(
+            titulo = titulo,
+            url = url,
+            estado = estado,
+            descripcion = descripcion,
+        )
+    else:
+        messages.error(request, "Ya existe esta url dentro de la base de datos")
+
 
     return redirect('/IngresarFuente/')
 
@@ -127,17 +139,25 @@ def EditarFuente(request, id_fuente):
     estado = request.POST['estado']
     descripcion = request.POST['descripcion']
 
-    fuente = FuentesInfo.objects.get(id_fuente=id_fuente)
+    try:
+        fuente = FuentesInfo.objects.get(url = url)
+        existeFuente = True
+    except FuentesInfo.DoesNotExist:
+        existeFuente = False
 
-    fuente.titulo = titulo
-    fuente.url = url
-    #fuente.tags = tags
-    fuente.estado = estado
-    fuente.descripcion = descripcion
+    if existeFuente == True:
+        fuente.titulo = titulo
+        fuente.url = url
+        #fuente.tags = tags
+        fuente.estado = estado
+        fuente.descripcion = descripcion
 
-    fuente.save()
+        fuente.save()
+        messages.success(request, "Fuente ingresada exitosamente")
+    else:
+        messages.error(request, "Ya existe una fuente con esta url")
 
-    return redirect('/FuentesU3I/')
+    return redirect('/ModificarFuente/' + str(id_fuente) + '/')
 
 #Acceso Bilbiotecolog@s
 @login_required(login_url='/Login/')

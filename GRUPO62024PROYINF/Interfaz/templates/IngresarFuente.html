@@ -20,31 +20,42 @@
         </ul>
     </nav>
 
-    <div class="card">
-        <h2>Ingresar Fuente</h2>
-        <form action="/IngresoFuente/" method="post"> {% csrf_token %}
-            <label for="titulo">Nombre de la Fuente:</label>
-            <input type="text" id="titulo" name="titulo" maxlength="100" placeholder="Nombre de la Fuente">
+    <div class="content-wrapper">
+        <div class="card">
+            <h2>Ingresar Fuente</h2>
+            <form action="/IngresoFuente/" method="post"> {% csrf_token %}
+                <label for="titulo">Nombre de la Fuente:</label>
+                <input type="text" id="titulo" name="titulo" maxlength="100" placeholder="Nombre de la Fuente">
 
-            <label for="url">URL:</label>
-            <input type="text" id="url" name="url" maxlength="100" placeholder="URL">
+                <label for="url">URL:</label>
+                <input type="text" id="url" name="url" maxlength="100" placeholder="URL">
 
-            <!--Tags--->
+                <!--Tags--->
 
-            <label for="estado">Estado:</label>
-            <select name="estado" id="estado" maxlength="50" required="">
-                <option value="Activo" selected>Activo</option>
-                <option value="Desactivado">Desactivado</option>
-            </select>
+                <label for="estado">Estado:</label>
+                <select name="estado" id="estado" maxlength="50" required="">
+                    <option value="Activo" selected>Activo</option>
+                    <option value="Desactivado">Desactivado</option>
+                </select>
 
-            <label for="descripcion">Descripcion:</label>
-            <input type="text" id="descripcion" name="descripcion" maxlength="500" placeholder="Descripcion">
-            
-            <div class="button-group">
-                <button type="submit" class="btn btn-green">Guardar Cambios</button>
-            </div>
-        </form>
-    </div>    
+                <label for="descripcion">Descripcion:</label>
+                <input type="text" id="descripcion" name="descripcion" maxlength="500" placeholder="Descripcion">
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-green">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-error{% elif message.tags == 'success' %}alert-success{% endif %}">
+            <strong>{{ message }}</strong>
+            <button type="button" class="close-btn" onclick="this.parentElement.style.display='none';" aria-label="Close">&times;</button>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
 
     <footer>
         <div class="footer-content">
