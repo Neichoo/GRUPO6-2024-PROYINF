@@ -1,0 +1,210 @@
+body {
+    background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar-container {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+    gap: 10px;
+}
+
+.search-bar-container input[type="text"] {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+}
+
+.search-bar-container .button-group {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.search-bar-container .button-group button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar-container .button-group button[type="reset"] {
+    background-color: #ff9933;
+}
+
+.search-bar-container .button-group button[type="reset"]:hover {
+    background-color: #e68a00;
+}
+
+.search-bar-container .button-group .filter-toggle {
+    background-color: #ff9933;
+}
+
+.search-bar-container .button-group button:hover {
+    background-color: #2980b9;
+}
+
+.filter-sidebar {
+    position: fixed;
+    right: -300px; 
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: #fff;
+    border-left: 2px solid #004466;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+
+.filter-sidebar h3 {
+    font-size: 18px;
+    color: #004466;
+}
+
+.filter-sidebar select,
+.filter-sidebar input[type="date"],
+.filter-sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+}
+
+.fuentes-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.fuentes-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.fuentes-container ul li {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.fuentes-container ul li:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.fuentes-container ul li h2 {
+    font-size: 24px;
+    color: #004466;
+    margin-bottom: 10px;
+}
+
+.fuentes-container ul li p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.fuentes-container ul li p strong {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.fuentes-container ul li a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.fuentes-container ul li a:hover {
+    background-color: #2980b9;
+}
+
+.filter-sidebar.show {
+    right: 0;
+}
+
+.filter-sidebar.hide {
+    right: -300px;
+}
+
+.boton-filtro {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.boton-filtro:hover {
+    background-color: #2980b9;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para el botón verde */
+.btn-green {
+    background-color: #28a745;
+}
+
+.btn-green:hover {
+    background-color: #218838;
+}
+
+.btn-yellow {
+    background-color: #ffc107;
+    color: #212529; /* Texto oscuro para mejor contraste */
+}
+
+.btn-yellow:hover {
+    background-color: #e0a800;
+}

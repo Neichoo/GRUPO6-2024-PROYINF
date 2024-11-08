@@ -72,7 +72,72 @@ def FuentesBiblio(request):
 #FUENTES U3I
 @login_required(login_url='/Login/')
 def FuentesU3I(request):
-    return render(request, "FuentesU3I.html")
+    form = BusquedaFuenteForm(request.GET or None)
+    fuentes = FuentesInfo.objects.filter(estado='Activo')
+    tags_conteo = Tag.objects.all()
+    if form.is_valid():
+        query = form.cleaned_data.get('query')
+        # Filtrar por palabras clave en nombre del boletín
+        if query:
+            fuentes = fuentes.filter(
+                Q(titulo__icontains=query)
+            )
+        # Filtrar por tag seleccionado en el menú desplegable
+        tag_filter = request.GET.get('filter')
+        if tag_filter:
+            fuentes = fuentes.filter(tags__nombre=tag_filter)
+
+    return render(request, 'FuentesU3I.html', {
+        'form': form,
+        'fuentes': fuentes,
+        'tags_conteo': tags_conteo
+    })
+
+#Ingreso fuentes
+@login_required(login_url='/Login/')
+def IngresarFuente(request):
+    return render(request, "IngresarFuente.html")
+
+def IngresoFuente(request):
+    titulo = request.POST['titulo']
+    url = request.POST['url']
+    #tags = request.POST['tags']
+    estado = request.POST['estado']
+    descripcion = request.POST['descripcion']
+    fuente = FuentesInfo.objects.create(
+        titulo = titulo,
+        url = url,
+        estado = estado,
+        descripcion = descripcion,
+    )
+
+    return redirect('/IngresarFuente/')
+
+#Modificar fuentes
+@login_required(login_url='/Login/')
+def ModificarFuente(request, id_fuente):
+    fuente = FuentesInfo.objects.get(id_fuente = id_fuente)
+    return render(request, "ModificarFuente.html", {"fuente": fuente})
+
+@login_required(login_url='/Login/')
+def EditarFuente(request, id_fuente):
+    titulo = request.POST['titulo']
+    url = request.POST['url']
+    #tags = request.POST['tags']
+    estado = request.POST['estado']
+    descripcion = request.POST['descripcion']
+
+    fuente = FuentesInfo.objects.get(id_fuente=id_fuente)
+
+    fuente.titulo = titulo
+    fuente.url = url
+    #fuente.tags = tags
+    fuente.estado = estado
+    fuente.descripcion = descripcion
+
+    fuente.save()
+
+    return redirect('/FuentesU3I/')
 
 #Acceso Bilbiotecolog@s
 @login_required(login_url='/Login/')

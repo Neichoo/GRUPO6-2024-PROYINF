@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>VIGIFIA: Fuentes</title>
+    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/ModificarFuente.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+</head>
+<body>
+    <nav>
+        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
+        <span class="nombreVIGIFIA">VIGIFIA</span>
+        <ul>
+            <li><a href="{% url 'PanelDeControl' %}">Inicio</a></li>
+            <li><a href="{% url 'FuentesU3I' %}">Fuentes</a></li>
+            <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
+            <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <div class="card">
+        <h2>Modificar Fuente</h2>
+        <form action="/EditarFuente/{{fuente.id_fuente}}/" method="post"> {% csrf_token %}
+            <label for="titulo">Nombre de la Fuente:</label>
+            <input type="text" id="titulo" name="titulo" maxlength="100" value="{{fuente.titulo}}">
+
+            <label for="url">URL:</label>
+            <input type="text" id="url" name="url" maxlength="100" value="{{fuente.url}}">
+
+            <!--Tags--->
+
+            <label for="estado">Estado:</label>
+            <select name="estado" id="estado" maxlength="50" required="">
+                <option value="Activo" {% if fuente.estado == "Activo" %}selected{% endif %}>Activo</option>
+                <option value="Desactivado" {% if fuente.estado == "Desactivado" %}selected{% endif %}>Desactivado</option>
+            </select>
+
+            <label for="descripcion">Descripcion:</label>
+            <input type="text" id="descripcion" name="descripcion" maxlength="500" value="{{fuente.descripcion}}">
+            
+            <div class="button-group">
+                <button type="submit" class="btn btn-green">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>    
+
+    <footer>
+        <div class="footer-content">
+            <p>Visita nuestro GitHub: 
+                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
+                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
+                </a>
+            </p>
+            <p>&copy; 2024 VIGIFIA</p>
+        </div>
+    </footer>
+    <script src="{% static 'JS/filterSidebar.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+body {
+    background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 20px;
+    width: 400px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.card h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.card label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+.card input[type="text"],
+.card textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.card .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-green {
+    background-color: #28a745;
+    color: white;
+}

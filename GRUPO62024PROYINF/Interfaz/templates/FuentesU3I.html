@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>VIGIFIA: Fuentes</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Fuentes.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/FuentesU3I.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
 </head>
 <body>
@@ -20,7 +20,61 @@
         </ul>
     </nav>
 
-    
+    <div class="search-bar-container">
+        <form method="GET" action="">
+            {{ form.query }}
+            <div class="button-group">
+                <button type="submit">Buscar</button>
+            </div>
+        </form>
+        <div class="button-group">
+            <a href="/IngresarFuente/" class="btn btn-green">Ingresar Fuente</a>
+            <button type="reset" onclick="window.location.href = window.location.pathname;">Reiniciar filtros</button>
+            <button class="filter-toggle" type="button" onclick="toggleFilterSidebar()">Filtrar</button>
+        </div>
+    </div>
+
+    <div class="filter-sidebar hide" id="filterSidebar">
+        <h3>Filtros de Búsqueda</h3>
+        <form method="GET" action="{% url 'FuentesBiblio' %}">
+            <label for="filter">Filtrar por Tag:</label>
+            <select id="filter" name="filter">
+                <option value="">Selecciona un tag</option>
+                {% for tag in tags_conteo %}
+                    <option value="{{ tag.nombre }}" {% if tag.nombre == request.GET.filter %}selected{% endif %}>{{ tag.nombre }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="boton-filtro">Aplicar Filtros</button>
+        </form>
+    </div>
+
+    <div class="fuentes-container">
+        <ul>
+            {% for fuente in fuentes %}
+                <li>
+                    <h2>{{ fuente.titulo }}</h2>
+                    <p><strong>Tags:</strong> 
+                        {% for tag in fuente.tags.all %}
+                            {{ tag.nombre }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <p><strong>URL:</strong> 
+                        <a href="{{ fuente.url }}" target="_blank">{{ fuente.url }}</a>
+                    </p>
+                    <p><strong>Descripcion: </strong>
+                        {{ fuente.descripcion }}
+                    </p>
+                    <p><strong>Estado: </strong>
+                        {{ fuente.estado }}
+                    </p>
+                    <a href="/ModificarFuente/{{fuente.id_fuente}}/" class="btn">Modificar Fuente</a>
+                </li>
+            {% empty %}
+                <p>No hay fuentes disponibles.</p>
+            {% endfor %}
+        </ul>
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -32,5 +86,6 @@
             <p>&copy; 2024 VIGIFIA</p>
         </div>
     </footer>
+    <script src="{% static 'JS/filterSidebar.js' %}"></script>
 </body>
 </html>
