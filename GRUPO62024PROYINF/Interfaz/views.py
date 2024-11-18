@@ -125,6 +125,38 @@ def IngresoFuente(request):
 
     return redirect('/IngresarFuente/')
 
+def IngresarTagFuente(request):
+    return render(request, "IngresarTagFuente.html")
+
+def IngresoTagFuente(request):
+    nombre = request.POST['nombre']
+
+    try:
+        tag = TagFuente.objects.get(nombre = nombre)
+        existeTag = True
+    except TagFuente.DoesNotExist:
+        existeTag = False
+
+    if existeTag == False:
+        messages.success(request, "Tag registrada exitosamente")
+        tag = TagFuente.objects.create(
+            nombre = nombre,
+        )
+    else:
+        messages.error(request, "Ya existe esta tag dentro de la base de datos")
+    
+    return redirect('/IngresarTagFuente/')
+
+def BorrarTagFuente(request):
+    tags = TagFuente.objects.all()
+    return render(request, "BorrarTagFuente.html",  {"tags": tags})
+
+def BorradoTagFuente(request, nombre):
+    tag = TagFuente.objects.get(nombre = nombre)
+    tag.delete()
+    return redirect("/BorrarTagFuente/")
+
+
 #Modificar fuentes
 @login_required(login_url='/Login/')
 def ModificarFuente(request, id_fuente):

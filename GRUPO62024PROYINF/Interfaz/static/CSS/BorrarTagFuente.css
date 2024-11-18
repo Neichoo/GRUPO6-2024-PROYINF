@@ -179,40 +179,19 @@ body {
     background-color: #2980b9;
 }
 
-.btn {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 16px;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
+.btn-danger {
+    color: white; /* Texto en blanco */
+    background-color: red; /* Fondo rojo */
+    border: 1px solid darkred; /* Borde rojo oscuro */
+    padding: 10px 15px; /* Espaciado interno */
+    text-decoration: none; /* Sin subrayado */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 14px; /* Tamaño del texto */
+    cursor: pointer; /* Cursor de mano */
 }
 
-/* Estilos para el botón verde */
-.btn-green {
-    background-color: #28a745;
-}
-
-.btn-green:hover {
-    background-color: #218838;
-}
-
-.btn-yellow {
-    background-color: #ffc107;
-    color: #212529; /* Texto oscuro para mejor contraste */
-}
-
-.btn-yellow:hover {
-    background-color: #e0a800;
-}
-
-.btn-red {
-    background-color: #FF0000;
-}
-
-.btn-red:hover {
-    background-color: #FF0000;
+/* Cambiar color al pasar el cursor */
+.btn-danger:hover {
+    background-color: darkred; /* Fondo más oscuro */
+    border-color: crimson; /* Borde diferente */
 }
