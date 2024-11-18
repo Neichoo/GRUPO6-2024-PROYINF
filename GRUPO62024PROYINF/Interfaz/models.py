@@ -3,7 +3,12 @@ from django.contrib.auth.models import User
 
 
 
-class Tag(models.Model):
+class TagBoletin(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return self.nombre
+
+class TagFuente(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     def __str__(self):
         return self.nombre
@@ -19,7 +24,7 @@ class FuentesInfo(models.Model):
     id_fuente = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=100, default="")
     url = models.CharField(max_length=100, unique=True)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(TagFuente)
     estado = models.CharField(
         max_length=12,
         choices=ESTADO_CHOICES,
@@ -32,7 +37,7 @@ class FuentesInfo(models.Model):
 class Boletin(models.Model):
     id_boletin = models.AutoField(primary_key=True)
     nombre_boletin = models.CharField(max_length=100)
-    tags_boletin = models.ManyToManyField(Tag)
+    tags_boletin = models.ManyToManyField(TagBoletin)
     fecha_boletin = models.DateField()
     url_pdf = models.FileField(upload_to='PDF/')
     

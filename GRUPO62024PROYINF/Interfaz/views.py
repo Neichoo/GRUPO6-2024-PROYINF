@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Boletin, Tag, Empleado, FuentesInfo
+from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo
 from .forms import BusquedaBoletinForm, BusquedaFuenteForm
 from django.db.models import Q
 
@@ -50,7 +50,7 @@ def Login_view(request):
 def FuentesBiblio(request):
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.filter(estado='Activo')
-    tags_conteo = Tag.objects.all()
+    tags_conteo = TagFuente.objects.all()
     if form.is_valid():
         query = form.cleaned_data.get('query')
         # Filtrar por palabras clave en nombre del boletín
@@ -74,7 +74,7 @@ def FuentesBiblio(request):
 def FuentesU3I(request):
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.all()
-    tags_conteo = Tag.objects.all()
+    tags_conteo = TagFuente.objects.all()
     if form.is_valid():
         query = form.cleaned_data.get('query')
         # Filtrar por palabras clave en nombre del boletín
@@ -179,7 +179,7 @@ def Logout_view(request):
 def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
     boletines = Boletin.objects.all()
-    tags_conteo = Tag.objects.all()
+    tags_conteo = TagBoletin.objects.all()
 
     # Aplicar filtros si el formulario es válido
     if form.is_valid():
@@ -187,7 +187,9 @@ def Boletines(request):
         fecha_desde = form.cleaned_data.get('fecha_desde')
         fecha_hasta = form.cleaned_data.get('fecha_hasta')
         ordenar_por = form.cleaned_data.get('ordenar_por')
-        tag_filter = form.cleaned_data.get('filter')  # Si 'filter' es un campo en el formulario
+        tag_filter = request.GET.get('filter')  # Si 'filter' es un campo en el formulario
+        print("Datos GET:", request.GET)
+        print("Tag filter", tag_filter)
 
         # Filtrar por palabras clave en el nombre del boletín
         if query:
@@ -195,6 +197,7 @@ def Boletines(request):
         
         # Filtrar por tag seleccionado si está presente
         if tag_filter:
+            print(f"Filtrando por tag: {tag_filter}")
             boletines = boletines.filter(tags_boletin__nombre=tag_filter)
         
         # Filtrar por rango de fechas si están definidos
