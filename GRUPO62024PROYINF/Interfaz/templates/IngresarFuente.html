@@ -3,10 +3,11 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title>VIGIFIA: Fuentes</title>
+    <title>VIGIFIA: Ingresar Fuente</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/IngresarFuente.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <nav>
@@ -15,6 +16,7 @@
         <ul>
             <li><a href="{% url 'PanelDeControl' %}">Inicio</a></li>
             <li><a href="{% url 'FuentesU3I' %}">Fuentes</a></li>
+            <li><a href="{% url 'TagsFuentes' %}">TagsFuentes</a></li>
             <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
             <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
         </ul>
@@ -26,21 +28,27 @@
             <form action="/IngresoFuente/" method="post"> {% csrf_token %}
                 <label for="titulo">Nombre de la Fuente:</label>
                 <input type="text" id="titulo" name="titulo" maxlength="100" placeholder="Nombre de la Fuente">
-
                 <label for="url">URL:</label>
                 <input type="text" id="url" name="url" maxlength="100" placeholder="URL">
-
-                <!--Tags--->
-
+                <label for="tags">
+                    <span>Seleccionar Tags</span>
+                    <span class="toggle-arrow" onclick="toggleFilterTags()">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </label>
+                <div id="filter" class="checkbox-group">
+                    {% for tag in tags_conteo %}
+                        <input type="checkbox" id="tag-{{ tag.id }}" name="tags" value="{{ tag.id }}">
+                        <label for="tag-{{ tag.id }}">{{ tag.nombre }}</label>
+                    {% endfor %}
+                </div>
                 <label for="estado">Estado:</label>
                 <select name="estado" id="estado" maxlength="50" required="">
                     <option value="Activo" selected>Activo</option>
                     <option value="Desactivado">Desactivado</option>
                 </select>
-
                 <label for="descripcion">Descripcion:</label>
                 <input type="text" id="descripcion" name="descripcion" maxlength="500" placeholder="Descripcion">
-                
                 <div class="button-group">
                     <button type="submit" class="btn btn-green">Guardar Cambios</button>
                 </div>

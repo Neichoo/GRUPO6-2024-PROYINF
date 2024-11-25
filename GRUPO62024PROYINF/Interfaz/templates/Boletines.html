@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/BoletinB.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,14 +39,6 @@
     <div class="filter-sidebar hide" id="filterSidebar">
         <h3>Filtros de Búsqueda</h3>
         <form method="GET" action="{% url 'Boletines' %}">
-            <label for="filter">Filtrar por Tag:</label>
-            <select id="filter" name="filter">
-                <option value="">Selecciona un tag</option>
-                {% for tag in tags_conteo %}
-                    <option value="{{ tag.nombre }}" {% if tag.nombre == request.GET.filter %}selected{% endif %}>{{ tag.nombre }}</option>
-                {% endfor %}
-            </select>
-            
             <label for="dateFrom">Desde:</label>
             <input type="date" id="dateFrom" name="fecha_desde" value="{{ form.fecha_desde.value }}">
             
@@ -58,6 +51,26 @@
                 <option value="desc" {% if form.ordenar_por.value == "desc" %}selected{% endif %}>Fecha Descendente</option>
             </select>
 
+            <label for="filter">
+                <span>Filtrar por Tags</span>
+                <span class="toggle-arrow" onclick="toggleFilterTags()">
+                    <i class="fas fa-chevron-down"></i>
+                </span>
+            </label>
+            
+            <div id="filter" class="checkbox-group" style="display: none;">
+                {% for tag in tags_conteo %}
+                    <div class="tag-item">
+                        <input 
+                            type="checkbox" 
+                            id="tag-{{ tag.id }}" 
+                            name="filter" 
+                            value="{{ tag.nombre }}" 
+                            {% if tag.nombre in selected_tags %}checked{% endif %}>
+                        <label for="tag-{{ tag.id }}">{{ tag.nombre }}</label>
+                    </div>
+                {% endfor %}
+            </div>
             <button type="submit" class="boton-filtro">Aplicar Filtros</button>
         </form>
     </div>

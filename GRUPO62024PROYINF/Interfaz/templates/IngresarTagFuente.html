@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title>VIGIFIA: Fuentes</title>
+    <title>VIGIFIA: Ingresar Tag Fuente</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/IngresarTagFuente.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
@@ -15,6 +15,7 @@
         <ul>
             <li><a href="{% url 'PanelDeControl' %}">Inicio</a></li>
             <li><a href="{% url 'FuentesU3I' %}">Fuentes</a></li>
+            <li><a href="{% url 'TagsFuentes' %}">TagsFuentes</a></li>
             <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
             <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
         </ul>

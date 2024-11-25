@@ -24,4 +24,8 @@ urlpatterns = [
     path('EditarFuente/<id_fuente>/', views.EditarFuente, name='EditarFuente'),
     path('Estadisticas/', views.Estadisticas, name='Estadisticas'),
     path('AccesoBiblio/', views.AccesoBiblio, name='AccesoBiblio'),
+    path('TagsFuentes/', views.TagsFuentes, name='TagsFuentes'),
+    path('BoletinBiblio', views.BoletinBiblio, name='BoletinBiblio'),
+    path('SubirBoletin/', views.crear_boletin, name='crear_boletin'),
+    path('BorrarBoletin/<int:id_boletin>/', views.eliminar_boletin, name='eliminar_boletin'),
 ]

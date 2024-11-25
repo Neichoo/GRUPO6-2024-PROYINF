@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>VIGIFIA: Subir Boletín</title>
+    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/SubirBoletin.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
+        <span class="nombreVIGIFIA">VIGIFIA</span>
+        <ul>
+            <li><a href="{% url 'AccesoBiblio' %}">Inicio</a></li>
+            <li><a href="{% url 'FuentesBiblio' %}">Fuentes</a></li>
+            <li><a href="{% url 'BoletinBiblio' %}">Boletines</a></li>
+            <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="card">
+            <h2>Subir Nuevo Boletín</h2>
+            <form action="{% url 'crear_boletin' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Nombre del boletín -->
+                <label for="nombre_boletin">Nombre del Boletín:</label>
+                <input type="text" id="nombre_boletin" name="nombre_boletin" maxlength="100" placeholder="Nombre del Boletín" required>
+
+                <!-- Fecha del boletín -->
+                <label for="fecha_boletin">Fecha del Boletín:</label>
+                <input type="date" id="fecha_boletin" name="fecha_boletin" required>
+
+                <!-- Mostrar/Ocultar Tags -->
+                <label for="tags">
+                    <span>Seleccionar Tags</span>
+                    <span class="toggle-arrow" onclick="toggleFilterTags()">
+                        <i class="fas fa-chevron-down"></i>
+                    </span>
+                </label>
+
+                <div id="filter" class="checkbox-group">
+                    {% for tag in tags_conteo %}
+                        <input type="checkbox" id="tag-{{ tag.id }}" name="tags_boletin" value="{{ tag.id }}">
+                        <label for="tag-{{ tag.id }}">{{ tag.nombre }}</label><br>
+                    {% endfor %}
+                </div>
+
+                <!-- Subir PDF -->
+                <label for="url_pdf">Subir PDF:</label>
+                <input type="file" id="url_pdf" name="url_pdf" accept=".pdf" required>
+
+                <!-- Botón para guardar -->
+                <div class="button-group">
+                    <button type="submit" class="btn btn-green">Guardar Boletín</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>Visita nuestro GitHub: 
+                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
+                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
+                </a>
+            </p>
+            <p>&copy; 2024 VIGIFIA</p>
+        </div>
+    </footer>
+    <script src="{% static 'JS/filterSidebar.js' %}"></script>
+</body>
+</html>

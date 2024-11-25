@@ -15,8 +15,10 @@
         <ul>
             <li><a href="{% url 'PanelDeControl' %}">Inicio</a></li>
             <li><a href="{% url 'FuentesU3I' %}">Fuentes</a></li>
+            <li><a href="{% url 'TagsFuentes' %}">TagsFuentes</a></li>
             <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
             <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         </ul>
     </nav>
 
@@ -28,8 +30,6 @@
             </div>
         </form>
         <div class="button-group">
-            <a href="/BorrarTagFuente/" class="btn btn-red">Borrar tags</a>
-            <a href="/IngresarTagFuente/" class="btn btn-green">Ingresar tags</a>
             <a href="/IngresarFuente/" class="btn btn-green">Ingresar Fuente</a>
             <button type="reset" onclick="window.location.href = window.location.pathname;">Reiniciar filtros</button>
             <button class="filter-toggle" type="button" onclick="toggleFilterSidebar()">Filtrar</button>
@@ -38,18 +38,30 @@
 
     <div class="filter-sidebar hide" id="filterSidebar">
         <h3>Filtros de Búsqueda</h3>
-        <form method="GET" action="{% url 'FuentesBiblio' %}">
-            <label for="filter">Filtrar por Tag:</label>
-            <select id="filter" name="filter">
-                <option value="">Selecciona un tag</option>
+        <form method="GET" action="{% url 'FuentesU3I' %}">
+            <label for="filter">
+                <span>Filtrar por Tags</span>
+                <span class="toggle-arrow" onclick="toggleFilterTags()">
+                    <i class="fas fa-chevron-down"></i>
+                </span>
+            </label>
+            <div id="filter" class="checkbox-group">
                 {% for tag in tags_conteo %}
-                    <option value="{{ tag.nombre }}" {% if tag.nombre == request.GET.filter %}selected{% endif %}>{{ tag.nombre }}</option>
+                    <div class="tag-item">
+                        <input 
+                            type="checkbox" 
+                            id="tag-{{ tag.id }}" 
+                            name="filter" 
+                            value="{{ tag.nombre }}" 
+                            {% if tag.nombre in selected_tags %}checked{% endif %}>
+                        <label for="tag-{{ tag.id }}">{{ tag.nombre }}</label>
+                    </div>
                 {% endfor %}
-            </select>
-
+            </div>
             <button type="submit" class="boton-filtro">Aplicar Filtros</button>
         </form>
     </div>
+    
 
     <div class="fuentes-container">
         <ul>

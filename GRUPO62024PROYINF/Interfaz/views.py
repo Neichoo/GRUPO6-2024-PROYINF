@@ -51,23 +51,21 @@ def FuentesBiblio(request):
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.filter(estado='Activo')
     tags_conteo = TagFuente.objects.all()
+    selected_tags = request.GET.getlist('filter') 
     if form.is_valid():
         query = form.cleaned_data.get('query')
-        # Filtrar por palabras clave en nombre del boletín
         if query:
-            fuentes = fuentes.filter(
-                Q(titulo__icontains=query)
-            )
-        # Filtrar por tag seleccionado en el menú desplegable
-        tag_filter = request.GET.get('filter')
-        if tag_filter:
-            fuentes = fuentes.filter(tags__nombre=tag_filter)
-
+            fuentes = fuentes.filter(Q(titulo__icontains=query))
+        if selected_tags:
+            for tag in selected_tags:
+                fuentes = fuentes.filter(tags__nombre=tag)
     return render(request, 'FuentesBiblio.html', {
         'form': form,
         'fuentes': fuentes,
-        'tags_conteo': tags_conteo
+        'tags_conteo': tags_conteo,
+        'selected_tags': selected_tags,
     })
+
 
 #FUENTES U3I
 @login_required(login_url='/Login/')
@@ -75,54 +73,109 @@ def FuentesU3I(request):
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.all()
     tags_conteo = TagFuente.objects.all()
+    selected_tags = request.GET.getlist('filter')
     if form.is_valid():
         query = form.cleaned_data.get('query')
-        # Filtrar por palabras clave en nombre del boletín
         if query:
-            fuentes = fuentes.filter(
-                Q(titulo__icontains=query)
-            )
-        # Filtrar por tag seleccionado en el menú desplegable
-        tag_filter = request.GET.get('filter')
-        if tag_filter:
-            fuentes = fuentes.filter(tags__nombre=tag_filter)
+            fuentes = fuentes.filter(Q(titulo__icontains=query))
+        if selected_tags:
+            for tag in selected_tags:
+                fuentes = fuentes.filter(tags__nombre=tag)
 
     return render(request, 'FuentesU3I.html', {
         'form': form,
         'fuentes': fuentes,
+        'tags_conteo': tags_conteo,
+        'selected_tags': selected_tags,
+    })
+
+@login_required(login_url='/Login/')
+def TagsFuentes(request):
+    return render(request, "TagsFuentes.html")
+
+@login_required(login_url='/Login/')
+def BoletinBiblio(request):
+    return render(request, "BoletinBiblio.html")
+@login_required(login_url='/Login/')
+def crear_boletin(request):
+    if request.method == "POST":
+        nombre_boletin = request.POST['nombre_boletin']
+        fecha_boletin = request.POST['fecha_boletin']
+        tags_ids = request.POST.getlist('tags_boletin')  # Obtener los tags seleccionados
+        url_pdf = request.FILES['url_pdf']  # Obtener el archivo PDF
+
+        # Verificar si el boletín ya existe por nombre (opcional)
+        try:
+            boletin = Boletin.objects.get(nombre_boletin=nombre_boletin)
+            messages.error(request, "Este boletín ya existe.")
+        except Boletin.DoesNotExist:
+            boletin = Boletin.objects.create(
+                nombre_boletin=nombre_boletin,
+                fecha_boletin=fecha_boletin,
+                url_pdf=url_pdf
+            )
+
+            # Asignar los tags seleccionados
+            for tag_id in tags_ids:
+                tag = TagBoletin.objects.get(id=tag_id)
+                boletin.tags_boletin.add(tag)
+
+            boletin.save()  # Guardar la relación ManyToMany
+            messages.success(request, "Boletín registrado exitosamente")
+
+        return redirect('/SubirBoletin/')  # Redirigir después de crear el boletín
+
+    # Obtener todos los tags disponibles para mostrarlos en el formulario
+    tags_conteo = TagBoletin.objects.all()
+    return render(request, 'SubirBoletin.html', {
         'tags_conteo': tags_conteo
     })
+@login_required(login_url='/Login/')
+def eliminar_boletin(request, id_boletin):
+    try:
+        boletin = Boletin.objects.get(id_boletin=id_boletin)
+        boletin.delete()
+        messages.success(request, "Boletín eliminado exitosamente")
+    except Boletin.DoesNotExist:
+        messages.error(request, "Boletín no encontrado")
+
+    return redirect('/Boletines/')
 
 #Ingreso fuentes
 @login_required(login_url='/Login/')
 def IngresarFuente(request):
-    return render(request, "IngresarFuente.html")
-
+    tags_conteo = TagFuente.objects.all()
+    return render(request, 'IngresarFuente.html', {
+        'tags_conteo': tags_conteo
+    })
+@login_required(login_url='/Login/')
 def IngresoFuente(request):
-    titulo = request.POST['titulo']
-    url = request.POST['url']
-    #tags = request.POST['tags']
-    estado = request.POST['estado']
-    descripcion = request.POST['descripcion']
-
-    try:
-        fuente = FuentesInfo.objects.get(url = url)
-        existeFuente = True
-    except FuentesInfo.DoesNotExist:
-        existeFuente = False
-
-    if existeFuente == False:
-        messages.success(request, "Fuente registrada exitosamente")
-        fuente = FuentesInfo.objects.create(
-            titulo = titulo,
-            url = url,
-            estado = estado,
-            descripcion = descripcion,
-        )
-    else:
-        messages.error(request, "Ya existe esta url dentro de la base de datos")
-
-
+    if request.method == "POST":
+        titulo = request.POST['titulo']
+        url = request.POST['url']
+        estado = request.POST['estado']
+        descripcion = request.POST['descripcion']
+        tags_ids = request.POST.getlist('tags')
+        try:
+            fuente = FuentesInfo.objects.get(url=url)
+            existeFuente = True
+        except FuentesInfo.DoesNotExist:
+            existeFuente = False
+        if not existeFuente:
+            fuente = FuentesInfo.objects.create(
+                titulo=titulo,
+                url=url,
+                estado=estado,
+                descripcion=descripcion,
+            )
+            for tag_id in tags_ids:
+                tag = TagFuente.objects.get(id=tag_id)
+                fuente.tags.add(tag)
+            fuente.save()
+            messages.success(request, "Fuente registrada exitosamente")
+        else:
+            messages.error(request, "Ya existe esta URL dentro de la base de datos")
+        return redirect('/IngresarFuente/')
     return redirect('/IngresarFuente/')
 
 def IngresarTagFuente(request):
@@ -212,33 +265,21 @@ def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
     boletines = Boletin.objects.all()
     tags_conteo = TagBoletin.objects.all()
-
-    # Aplicar filtros si el formulario es válido
+    selected_tags = request.GET.getlist('filter')
     if form.is_valid():
         query = form.cleaned_data.get('query')
         fecha_desde = form.cleaned_data.get('fecha_desde')
         fecha_hasta = form.cleaned_data.get('fecha_hasta')
         ordenar_por = form.cleaned_data.get('ordenar_por')
-        tag_filter = request.GET.get('filter')  # Si 'filter' es un campo en el formulario
-        print("Datos GET:", request.GET)
-        print("Tag filter", tag_filter)
-
-        # Filtrar por palabras clave en el nombre del boletín
         if query:
             boletines = boletines.filter(Q(nombre_boletin__icontains=query))
-        
-        # Filtrar por tag seleccionado si está presente
-        if tag_filter:
-            print(f"Filtrando por tag: {tag_filter}")
-            boletines = boletines.filter(tags_boletin__nombre=tag_filter)
-        
-        # Filtrar por rango de fechas si están definidos
+        if selected_tags:
+            for tag in selected_tags:
+                boletines = boletines.filter(tags_boletin__nombre=tag)
         if fecha_desde:
             boletines = boletines.filter(fecha_boletin__gte=fecha_desde)
         if fecha_hasta:
             boletines = boletines.filter(fecha_boletin__lte=fecha_hasta)
-        
-        # Ordenar resultados por fecha
         if ordenar_por == 'asc':
             boletines = boletines.order_by('fecha_boletin')
         elif ordenar_por == 'desc':
@@ -247,5 +288,6 @@ def Boletines(request):
     return render(request, 'boletines.html', {
         'form': form,
         'boletines': boletines,
-        'tags_conteo': tags_conteo
+        'tags_conteo': tags_conteo,
+        'selected_tags': selected_tags,
     })
