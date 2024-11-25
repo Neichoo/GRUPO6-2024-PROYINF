@@ -130,16 +130,17 @@ def crear_boletin(request):
     return render(request, 'SubirBoletin.html', {
         'tags_conteo': tags_conteo
     })
-@login_required(login_url='/Login/')
-def eliminar_boletin(request, id_boletin):
-    try:
-        boletin = Boletin.objects.get(id_boletin=id_boletin)
-        boletin.delete()
-        messages.success(request, "Boletín eliminado exitosamente")
-    except Boletin.DoesNotExist:
-        messages.error(request, "Boletín no encontrado")
 
-    return redirect('/Boletines/')
+@login_required(login_url='/Login/')
+def BorrarBoletin(request):
+    boletines = Boletin.objects.all()
+    return render(request, 'BorrarBoletin.html', {'boletines' : boletines})
+
+@login_required(login_url='/Login/')
+def BorradoBoletin(request, id_boletin):
+    boletin = Boletin.objects.get(id_boletin = id_boletin)
+    boletin.delete()
+    return redirect('/BorrarBoletin/')
 
 #Ingreso fuentes
 @login_required(login_url='/Login/')

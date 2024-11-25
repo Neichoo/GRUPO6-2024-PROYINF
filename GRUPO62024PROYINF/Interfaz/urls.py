@@ -27,5 +27,6 @@ urlpatterns = [
     path('TagsFuentes/', views.TagsFuentes, name='TagsFuentes'),
     path('BoletinBiblio', views.BoletinBiblio, name='BoletinBiblio'),
     path('SubirBoletin/', views.crear_boletin, name='crear_boletin'),
-    path('BorrarBoletin/<int:id_boletin>/', views.eliminar_boletin, name='eliminar_boletin'),
+    path('BorrarBoletin/', views.BorrarBoletin, name='BorrarBoletin'),
+    path('BorradoBoletin/<id_boletin>/', views.BorradoBoletin, name='BorradoBoletin'),
 ]
