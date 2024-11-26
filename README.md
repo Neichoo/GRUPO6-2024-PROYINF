@@ -31,3 +31,4 @@ el comando "pip install django". Si la versión de Django no es la 5.1.1, actual
 # Videos:
 * [Presentación del Cliente](https://youtu.be/abJau21SDIk?si=tvCJ4hAYGWEmOwB1)
 * [Hito 3](https://youtu.be/cpYMbSeO0tY)
+* [Hito 5](https://youtu.be/CzXCEGhlfxI)
