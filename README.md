@@ -9,7 +9,8 @@
 | **Ignacio Gómez**  | 202273553-8              |
 | **Miguel Huerta**  | 202273602-k              |
 
-* **Tutor**: Ignacio Muñoz
+* **Tutor (2024-02)**: Ignacio Muñoz
+* **Tutor (2025-01)**: José Southerland
 
 # Wiki:
 Puede acceder a la Wiki mediante el siguiente [enlace](https://github.com/Neichoo/GRUPO6-2024-PROYINF/wiki)
