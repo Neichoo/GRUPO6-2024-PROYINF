@@ -1,4 +1,4 @@
-# Proyecto Análisis y Diseño de Software (INF236) 2025-01
+# Proyecto Análisis y Diseño de Software (INF236) 2024-02
 
 # Integrantes del Grupo
 
