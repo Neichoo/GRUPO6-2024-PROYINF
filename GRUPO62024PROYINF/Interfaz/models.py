@@ -55,3 +55,9 @@ class Empleado(models.Model):
     
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     tipo = models.CharField(max_length=50, choices=TIPO_CHOICES)
+
+class UsuarioLector(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    #placeholder
+    preferencias = models.CharField(max_length=50, default='')
+    notificaciones = models.BooleanField(default=True)

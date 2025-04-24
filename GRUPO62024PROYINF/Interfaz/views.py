@@ -2,9 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo
+from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo, UsuarioLector
 from .forms import BusquedaBoletinForm, BusquedaFuenteForm
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 def Inicio(request):
@@ -18,6 +19,43 @@ def Contacto(request):
 
 def Login_form(request):
     return render(request, "Login.html")
+
+def Register_usuario(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm = request.POST['confirm_password']
+        email = request.POST['email']
+
+        if password != confirm:
+            messages.error(request, 'Las contraseñas no coinciden')
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, 'El usuario ya existe')
+        elif User.objects.filter(email=email).exists():
+            messages.error(request, 'El correo ya está registrado')
+        else:
+            user = User.objects.create_user(username=username, password=password, email=email)
+            UsuarioLector.objects.create(usuario=user)
+            messages.success(request, 'Cuenta creada. Ahora inicia sesión.')
+            return redirect('LoginUsuario')
+
+    return render(request, 'RegisterUsuario.html')
+
+def LoginUsuario(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if not username or not password:
+            messages.error(request, 'Por favor ingrese ambos campos: usuario y contraseña.')
+            return render(request, 'LoginUsuario.html')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return redirect('Inicio')
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos.')
+    return render(request, 'LoginUsuario.html')
 
 def Login_view(request):
     if request.method == 'POST':

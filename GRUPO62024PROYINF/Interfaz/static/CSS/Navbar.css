@@ -29,21 +29,28 @@ nav ul li a {
     padding: 30px 20px;
     font-size: x-large;
 }
-/* Color de fondo al pasar el cursor por encima */
-nav ul li:not(.acceso-empleado) a:hover {
-    background-color: #ff9933;
-    padding: 35px 35px;
-    padding-top: 70px;
-}
+
 .acceso-empleado a {
-    background-color: #ff9933;
+    background-color: #4433ff;
     padding: 10px 15px;
-    border-radius: 5px;
+    font-size: small;
+    border-radius: 2px;
     color: white;
     position: absolute;
-    right: 20px;
+    right: 30px;
+    bottom: 30px;
     align-items: center;
   }
+.acceso-usuario a {
+background-color: #ff9933;
+padding: 10px 15px;
+border-radius: 5px;
+color: white;
+position: absolute;
+right: 20px;
+align-items: center;
+}
+
 .IconoVIGIFIA {
     position: absolute;
     top: 5px;
