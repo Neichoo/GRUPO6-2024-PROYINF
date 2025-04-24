@@ -9,27 +9,9 @@
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
 </head>
 <body>
-    <nav>
-        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
-        <span class="nombreVIGIFIA">VIGIFIA</span>
-        <ul>
-            <li><a href="{% url 'AccesoBiblio' %}">Inicio</a></li>
-            <li><a href="{% url 'FuentesBiblio' %}">Fuentes</a></li>
-            <li><a href="{% url 'BoletinBiblio' %}">Boletines</a></li>
-            <li class="acceso-empleado"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
-        </ul>
-    </nav>
+    {% include 'componentes/Navbar.html' %}
     <h1>Bienvenid@, Bibliotecólog@</h1>
     <p>Aquí se mostrará contenido específico para bibliotecólog@s.</p>
-    <footer>
-        <div class="footer-content">
-            <p>Visita nuestro GitHub: 
-                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
-                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
-                </a>
-            </p>
-            <p>&copy; 2024 VIGIFIA</p>
-        </div>
-    </footer>
+    {% include 'componentes/Footer.html' %}
 </body>
 </html>

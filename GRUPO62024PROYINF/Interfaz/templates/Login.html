@@ -1,60 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIGIFIA: Inicio</title>
-    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Login.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
-</head>
+    <head>
+        {% load static %}
+        <meta charset="UTF-8">
+        <title>VIGIFIA: Iniciar Sesión Empleado</title>
+        <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+        <link rel="stylesheet" href="{% static 'CSS/Login.css' %}">
+        <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    </head>
 
-<body>
-    <nav>
-        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
-        <span class="nombreVIGIFIA">VIGIFIA</span>
-        <ul>
-            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
-        </ul>
-    </nav>
-    <div class="login-page">
-        <section class="login-container">
-            <div class="Login">
-                <h2>Iniciar Sesión</h2>
-                <form method="POST" action="{% url 'Login_view' %}">
-                    {% csrf_token %}
-                    <label for="username">Usuario:</label>
-                    <input type="text" id="username" name="username" required>
+    <body>
+        {% include 'componentes/Navbar.html' %}
+        <div class="login-page">
+            <section class="login-container">
+                <div class="Login">
+                    <h2>Iniciar Sesión</h2>
+                    <form method="POST" action="{% url 'Login_view' %}">
+                        {% csrf_token %}
+                        <label for="username">Usuario:</label>
+                        <input type="text" id="username" name="username" required>
 
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" required>
+                        <label for="password">Contraseña:</label>
+                        <input type="password" id="password" name="password" required>
 
-                    <button type="submit">Iniciar Sesión</button>
-                </form>
+                        <button type="submit">Iniciar Sesión</button>
+                    </form>
 
-                {% if messages %}
-                    <ul class="login-messages">
-                        {% for message in messages %}
-                            <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <p>Visita nuestro GitHub: 
-                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
-                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
-                </a>
-            </p>
-            <p>&copy; 2024 VIGIFIA</p>
+                    {% if messages %}
+                        <ul class="login-messages">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </section>
         </div>
-    </footer>
-</body>
+
+        {% include 'componentes/Footer.html' %}
+    </body>
 </html>
 
 

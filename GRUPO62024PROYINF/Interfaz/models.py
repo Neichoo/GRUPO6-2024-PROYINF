@@ -61,3 +61,19 @@ class UsuarioLector(models.Model):
     #placeholder
     preferencias = models.CharField(max_length=50, default='')
     notificaciones = models.BooleanField(default=True)
+
+
+def get_empleado(self):
+    try:
+        return self.empleado
+    except self.empleado.DoesNotExist:
+        return None
+       
+def get_usuariolector(self):
+    try:
+        return self.usuariolector
+    except self.usuariolector.DoesNotExist:
+        return None
+    
+User.add_to_class("Empleado", property(get_empleado))
+User.add_to_class("UsuarioLector", property(get_usuariolector))

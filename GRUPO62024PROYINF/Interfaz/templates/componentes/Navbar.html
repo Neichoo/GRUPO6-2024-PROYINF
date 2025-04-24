@@ -1,0 +1,39 @@
+{% load static %}
+<nav>
+    <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIA" class="IconoVIGIFIA">
+    <span class="nombreVIGIFIA">VIGIFIA</span>
+
+    {% if not user.is_authenticated %}
+        <ul>
+            <li class="botoncin"><a href="{% url 'Inicio' %}">Inicio</a></li>
+            <li class="botoncin"><a href="{% url 'Boletines' %}">Boletínes</a></li>
+            <li class="botoncin"><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
+            <li class="botoncin"><a href="{% url 'Contacto' %}">Contacto</a></li>
+            <li class="acceso-usuario"><a href="{% url 'LoginUsuario' %}">Acceso usuario</a></li>
+            <li class="acceso-empleado"><a href="{% url 'Login' %}">Acceso Empleado</a></li>
+        </ul>
+    {% else %}
+        <ul>
+            {% if user.Empleado %}
+                {% if user.Empleado.tipo == "EquipoU3I" %}
+                    <li><a href="{% url 'PanelDeControl' %}">Inicio</a></li>
+                    <li><a href="{% url 'FuentesU3I' %}">Fuentes</a></li>
+                    <li><a href="{% url 'TagsFuentes' %}">TagsFuentes</a></li>
+                    <li><a href="{% url 'Estadisticas' %}">Estadísticas</a></li>
+                    <li class="acceso-empleado"><a href="{% url 'Logout' %}">Cerrar Sesión</a></li>
+                {% elif user.empleado.tipo == "Bibliotecologo/a" %}
+                    <li><a href="{% url 'AccesoBiblio' %}">Inicio</a></li>
+                    <li><a href="{% url 'FuentesBiblio' %}">Fuentes</a></li>
+                    <li><a href="{% url 'BoletinBiblio' %}">Boletines</a></li>
+                    <li class="acceso-empleado"><a href="{% url 'Logout' %}">Cerrar Sesión</a></li>
+                {% endif %}
+            {% elif user.usuariolector %}
+                <li class="botoncin"><a href="{% url 'Inicio' %}">Inicio</a></li>
+                <li class="botoncin"><a href="{% url 'Boletines' %}">Boletínes</a></li>
+                <li class="botoncin"><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
+                <li class="botoncin"><a href="{% url 'Contacto' %}">Contacto</a></li>
+                <li class="acceso-usuario"><a href="{% url 'Logout' %}">Cerrar Sesión</a></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</nav>

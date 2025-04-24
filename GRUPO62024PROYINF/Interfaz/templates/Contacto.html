@@ -10,27 +10,8 @@
 </head>
 
 <body>
-    <nav>
-        <img src="{% static 'IMG/Icono.png' %}" alt="IconoVIGIFIATemplate" class="IconoVIGIFIA">
-        <span class="nombreVIGIFIA">VIGIFIA</span>
-        <ul>
-            <li><a href="{% url 'Inicio' %}">Inicio</a></li>
-            <li><a href="{% url 'Boletines' %}">Boletínes</a></li>
-            <li><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
-            <li><a href="{% url 'Contacto' %}">Contacto</a></li>
-            <li class="acceso-empleado"><a href="{% url 'Login' %}">Acceso Empleado</a></li>
-        </ul>
-    </nav>
-    <footer>
-        <div class="footer-content">
-            <p>Visita nuestro GitHub: 
-                <a href="https://github.com/Neichoo/GRUPO6-2024-PROYINF" target="_blank">
-                    <img src="{% static 'IMG/github-mark-white.png' %}" alt="GitHub" style="width: 30px; height: 30px;"> 
-                </a>
-            </p>
-            <p>&copy; 2024 VIGIFIA</p>
-        </div>
-    </footer>
+    {% include 'componentes/Navbar.html' %}
+    {% include 'componentes/Footer.html' %}
     
 </body>
 </html>

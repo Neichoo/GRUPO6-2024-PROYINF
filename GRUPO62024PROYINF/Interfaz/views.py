@@ -1,12 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo, UsuarioLector
 from .forms import BusquedaBoletinForm, BusquedaFuenteForm
 from django.db.models import Q
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
 from django.contrib.auth.models import User
-
+from django.utils.encoding import force_bytes
+from django.http import HttpResponseForbidden
 
 def Inicio(request):
     return render(request, "Inicio.html")
@@ -36,10 +41,45 @@ def Register_usuario(request):
         else:
             user = User.objects.create_user(username=username, password=password, email=email)
             UsuarioLector.objects.create(usuario=user)
+
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            confirmation_link = f'http://localhost:8000/confirmar/{uid}/{token}/'
+            subject = "Confirmación de Registro"
+            message = render_to_string(
+                'confirmation_email.html', {'confirmation_link': confirmation_link}
+            )
+
+
+            send_mail(
+                subject,
+                message,
+                'noreply@vigifia.com',
+                [email],
+                fail_silently=False,
+            )
             messages.success(request, 'Cuenta creada. Ahora inicia sesión.')
             return redirect('LoginUsuario')
 
     return render(request, 'RegisterUsuario.html')
+
+def confirm_registration(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = get_user_model().objects.get(pk=uid)
+
+        if default_token_generator.check_token(user, token):
+            user.is_active = True 
+            user.save()
+            messages.success(request, 'Tu cuenta ha sido activada. Ahora puedes iniciar sesión.')
+            return redirect('LoginUsuario')
+        else:
+            messages.error(request, 'El enlace de confirmación no es válido o ha expirado.')
+            return redirect('Register_usuario')
+
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        messages.error(request, 'Enlace de confirmación inválido.')
+        return redirect('Register_usuario')
 
 def LoginUsuario(request):
     if request.method == 'POST':
@@ -83,9 +123,17 @@ def Login_view(request):
             messages.error(request, 'Usuario o contraseña incorrectos.')
     return render(request, 'Login.html')
 
+#Cerrar Sesión
+@login_required(login_url='/Login/')
+def Logout_view(request):
+    logout(request)
+    return redirect('Inicio')
+
 #FUENTES Bilbiotecolog@s
 @login_required(login_url='/Login/')
 def FuentesBiblio(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.filter(estado='Activo')
     tags_conteo = TagFuente.objects.all()
@@ -108,6 +156,8 @@ def FuentesBiblio(request):
 #FUENTES U3I
 @login_required(login_url='/Login/')
 def FuentesU3I(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.all()
     tags_conteo = TagFuente.objects.all()
@@ -129,13 +179,20 @@ def FuentesU3I(request):
 
 @login_required(login_url='/Login/')
 def TagsFuentes(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "TagsFuentes.html")
 
 @login_required(login_url='/Login/')
 def BoletinBiblio(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "BoletinBiblio.html")
+
 @login_required(login_url='/Login/')
 def crear_boletin(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     if request.method == "POST":
         nombre_boletin = request.POST['nombre_boletin']
         fecha_boletin = request.POST['fecha_boletin']
@@ -171,6 +228,8 @@ def crear_boletin(request):
 
 @login_required(login_url='/Login/')
 def BorrarBoletin(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     boletines = Boletin.objects.all()
     return render(request, 'BorrarBoletin.html', {'boletines' : boletines})
 
@@ -183,6 +242,8 @@ def BorradoBoletin(request, id_boletin):
 #Ingreso fuentes
 @login_required(login_url='/Login/')
 def IngresarFuente(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags_conteo = TagFuente.objects.all()
     return render(request, 'IngresarFuente.html', {
         'tags_conteo': tags_conteo
@@ -218,6 +279,8 @@ def IngresoFuente(request):
     return redirect('/IngresarFuente/')
 
 def IngresarTagFuente(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "IngresarTagFuente.html")
 
 def IngresoTagFuente(request):
@@ -240,6 +303,8 @@ def IngresoTagFuente(request):
     return redirect('/IngresarTagFuente/')
 
 def BorrarTagFuente(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags = TagFuente.objects.all()
     return render(request, "BorrarTagFuente.html",  {"tags": tags})
 
@@ -252,6 +317,8 @@ def BorradoTagFuente(request, nombre):
 #Modificar fuentes
 @login_required(login_url='/Login/')
 def ModificarFuente(request, id_fuente):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     fuente = FuentesInfo.objects.get(id_fuente = id_fuente)
     return render(request, "ModificarFuente.html", {"fuente": fuente})
 
@@ -290,15 +357,15 @@ def AccesoBiblio(request):
 
 @login_required(login_url='/Login/')
 def Estadisticas(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "Estadisticas.html")
 
 @login_required(login_url='/Login/')
 def PanelDeControl(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "PanelDeControl.html")
-
-def Logout_view(request):
-    logout(request)
-    return redirect('Login')
 
 def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)

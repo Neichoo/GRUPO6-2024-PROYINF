@@ -31,7 +31,7 @@ nav ul li a {
 }
 
 .acceso-empleado a {
-    background-color: #4433ff;
+    background-color: #cc5500;
     padding: 10px 15px;
     font-size: small;
     border-radius: 2px;
@@ -64,4 +64,9 @@ align-items: center;
     font-size: 1.2em;
     margin-left: 13%;
     align-items: center;
+}
+
+.botoncin a:hover {
+    background-color: #ff9933;
+    color: white;
 }
