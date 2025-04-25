@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <title>VIGIFIA: Fuentes</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/FuentesBiblio.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/FuentesU3I.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    {% include 'componentes/Navbar.html' %}
+    {% include 'base/componentes/Navbar.html' %}
 
     <div class="search-bar-container">
         <form method="GET" action="">
@@ -20,6 +19,7 @@
             </div>
         </form>
         <div class="button-group">
+            <a href="/IngresarFuente/" class="btn btn-green">Ingresar Fuente</a>
             <button type="reset" onclick="window.location.href = window.location.pathname;">Reiniciar filtros</button>
             <button class="filter-toggle" type="button" onclick="toggleFilterSidebar()">Filtrar</button>
         </div>
@@ -27,15 +27,14 @@
 
     <div class="filter-sidebar hide" id="filterSidebar">
         <h3>Filtros de Búsqueda</h3>
-        <form method="GET" action="{% url 'FuentesBiblio' %}">
+        <form method="GET" action="{% url 'FuentesU3I' %}">
             <label for="filter">
                 <span>Filtrar por Tags</span>
                 <span class="toggle-arrow" onclick="toggleFilterTags()">
                     <i class="fas fa-chevron-down"></i>
                 </span>
             </label>
-
-            <div id="filter" class="checkbox-group" style="display: none;">
+            <div id="filter" class="checkbox-group">
                 {% for tag in tags_conteo %}
                     <div class="tag-item">
                         <input 
@@ -48,10 +47,10 @@
                     </div>
                 {% endfor %}
             </div>
-
             <button type="submit" class="boton-filtro">Aplicar Filtros</button>
         </form>
     </div>
+    
 
     <div class="fuentes-container">
         <ul>
@@ -69,6 +68,10 @@
                     <p><strong>Descripcion: </strong>
                         {{ fuente.descripcion }}
                     </p>
+                    <p><strong>Estado: </strong>
+                        {{ fuente.estado }}
+                    </p>
+                    <a href="/ModificarFuente/{{fuente.id_fuente}}/" class="btn">Modificar Fuente</a>
                 </li>
             {% empty %}
                 <p>No hay fuentes disponibles.</p>
@@ -76,7 +79,7 @@
         </ul>
     </div>
 
-    {% include 'componentes/Footer.html' %}
+    {% include 'base/componentes/Footer.html' %}
     <script src="{% static 'JS/filterSidebar.js' %}"></script>
 </body>
 </html>

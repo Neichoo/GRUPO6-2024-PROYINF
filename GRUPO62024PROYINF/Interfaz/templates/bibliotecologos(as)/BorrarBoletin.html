@@ -5,26 +5,26 @@
     <meta charset="UTF-8">
     <title>VIGIFIA: Fuentes</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/BorrarTagFuente.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/BorrarBoletin.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
 </head>
 <body>
-    {% include 'componentes/Navbar.html' %}
+    {% include 'base/componentes/Navbar.html' %}
 
     <div class="fuentes-container">
         <ul>
-            {% for tag in tags %}
+            {% for boletin in boletines %}
                 <li>
-                    <h2>{{ tag.nombre }}</h2>
-                    <a href="/BorradoTagFuente/{{tag.nombre}}/" class="btn btn-danger">Eliminar tag</a>
+                    <h2>{{ boletin.nombre_boletin }}</h2>
+                    <a href="/BorradoBoletin/{{boletin.id_boletin}}/" class="btn btn-danger">Eliminar boletin</a>
                 </li>
             {% empty %}
-                <p>No hay tags disponibles.</p>
+                <p>No hay boletines disponibles.</p>
             {% endfor %}
         </ul>
     </div>
 
-    {% include 'componentes/Footer.html' %}
+    {% include 'base/componentes/Footer.html' %}
     <script src="{% static 'JS/filterSidebar.js' %}"></script>
 </body>
 </html>

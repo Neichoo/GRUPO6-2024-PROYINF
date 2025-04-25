@@ -14,16 +14,16 @@ from django.utils.encoding import force_bytes
 from django.http import HttpResponseForbidden
 
 def Inicio(request):
-    return render(request, "Inicio.html")
+    return render(request, "general/Inicio.html")
 
 def Sobre_vigifia(request):
-    return render(request, "SobreVIGIFIA.html")
+    return render(request, "general/SobreVIGIFIA.html")
 
 def Contacto(request):
-    return render(request, "Contacto.html")
+    return render(request, "general/Contacto.html")
 
 def Login_form(request):
-    return render(request, "Login.html")
+    return render(request, "base/auth/Login.html")
 
 def Register_usuario(request):
     if request.method == 'POST':
@@ -45,23 +45,23 @@ def Register_usuario(request):
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             confirmation_link = f'http://localhost:8000/confirmar/{uid}/{token}/'
-            subject = "Confirmación de Registro"
-            message = render_to_string(
-                'confirmation_email.html', {'confirmation_link': confirmation_link}
-            )
 
+            subject = "Confirmación de Registro"
+            html_message = render_to_string('base/auth/confirmation_email.html', {'confirmation_link': confirmation_link})
+            plain_message = f'Gracias por registrarte en nuestra plataforma. Confirma tu cuenta aquí: {confirmation_link}'
 
             send_mail(
                 subject,
-                message,
+                plain_message,
                 'noreply@vigifia.com',
                 [email],
                 fail_silently=False,
+                html_message=html_message
             )
             messages.success(request, 'Cuenta creada. Ahora inicia sesión.')
             return redirect('LoginUsuario')
 
-    return render(request, 'RegisterUsuario.html')
+    return render(request, 'base/auth/RegisterUsuario.html')
 
 def confirm_registration(request, uidb64, token):
     try:
@@ -87,7 +87,7 @@ def LoginUsuario(request):
         password = request.POST.get('password')
         if not username or not password:
             messages.error(request, 'Por favor ingrese ambos campos: usuario y contraseña.')
-            return render(request, 'LoginUsuario.html')
+            return render(request, 'base/auth/LoginUsuario.html')
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
@@ -95,7 +95,7 @@ def LoginUsuario(request):
             return redirect('Inicio')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'LoginUsuario.html')
+    return render(request, 'base/auth/LoginUsuario.html')
 
 def Login_view(request):
     if request.method == 'POST':
@@ -103,7 +103,7 @@ def Login_view(request):
         password = request.POST.get('password')
         if not username or not password:
             messages.error(request, 'Por favor ingrese ambos campos: usuario y contraseña.')
-            return render(request, 'Login.html')
+            return render(request, 'base/auth/Login.html')
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
@@ -116,12 +116,12 @@ def Login_view(request):
                     return redirect('AccesoBiblio')
                 else:
                     messages.error(request, 'Tipo de empleado no reconocido.')
-                    return render(request, 'Login.html')
+                    return render(request, 'base/auth/Login.html')
             except Empleado.DoesNotExist:
                 messages.error(request, 'Empleado no registrado en el sistema.')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'Login.html')
+    return render(request, 'base/auth/Login.html')
 
 #Cerrar Sesión
 @login_required(login_url='/Login/')
@@ -145,7 +145,7 @@ def FuentesBiblio(request):
         if selected_tags:
             for tag in selected_tags:
                 fuentes = fuentes.filter(tags__nombre=tag)
-    return render(request, 'FuentesBiblio.html', {
+    return render(request, 'bibliotecologos(as)/FuentesBiblio.html', {
         'form': form,
         'fuentes': fuentes,
         'tags_conteo': tags_conteo,
@@ -170,7 +170,7 @@ def FuentesU3I(request):
             for tag in selected_tags:
                 fuentes = fuentes.filter(tags__nombre=tag)
 
-    return render(request, 'FuentesU3I.html', {
+    return render(request, 'equipo_u3i/FuentesU3I.html', {
         'form': form,
         'fuentes': fuentes,
         'tags_conteo': tags_conteo,
@@ -181,13 +181,13 @@ def FuentesU3I(request):
 def TagsFuentes(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    return render(request, "TagsFuentes.html")
+    return render(request, "equipo_u3i/TagsFuentes.html")
 
 @login_required(login_url='/Login/')
 def BoletinBiblio(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    return render(request, "BoletinBiblio.html")
+    return render(request, "bibliotecologos(as)/BoletinBiblio.html")
 
 @login_required(login_url='/Login/')
 def crear_boletin(request):
@@ -222,7 +222,7 @@ def crear_boletin(request):
 
     # Obtener todos los tags disponibles para mostrarlos en el formulario
     tags_conteo = TagBoletin.objects.all()
-    return render(request, 'SubirBoletin.html', {
+    return render(request, 'bibliotecologos(as)/SubirBoletin.html', {
         'tags_conteo': tags_conteo
     })
 
@@ -231,7 +231,7 @@ def BorrarBoletin(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     boletines = Boletin.objects.all()
-    return render(request, 'BorrarBoletin.html', {'boletines' : boletines})
+    return render(request, 'bibliotecologos(as)/BorrarBoletin.html', {'boletines' : boletines})
 
 @login_required(login_url='/Login/')
 def BorradoBoletin(request, id_boletin):
@@ -245,7 +245,7 @@ def IngresarFuente(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags_conteo = TagFuente.objects.all()
-    return render(request, 'IngresarFuente.html', {
+    return render(request, 'equipo_u3i/IngresarFuente.html', {
         'tags_conteo': tags_conteo
     })
 @login_required(login_url='/Login/')
@@ -281,7 +281,7 @@ def IngresoFuente(request):
 def IngresarTagFuente(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    return render(request, "IngresarTagFuente.html")
+    return render(request, "equipo_u3i/IngresarTagFuente.html")
 
 def IngresoTagFuente(request):
     nombre = request.POST['nombre']
@@ -306,7 +306,7 @@ def BorrarTagFuente(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags = TagFuente.objects.all()
-    return render(request, "BorrarTagFuente.html",  {"tags": tags})
+    return render(request, "equipo_u3i/BorrarTagFuente.html",  {"tags": tags})
 
 def BorradoTagFuente(request, nombre):
     tag = TagFuente.objects.get(nombre = nombre)
@@ -320,7 +320,7 @@ def ModificarFuente(request, id_fuente):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     fuente = FuentesInfo.objects.get(id_fuente = id_fuente)
-    return render(request, "ModificarFuente.html", {"fuente": fuente})
+    return render(request, "equipo_u3i/ModificarFuente.html", {"fuente": fuente})
 
 @login_required(login_url='/Login/')
 def EditarFuente(request, id_fuente):
@@ -353,19 +353,19 @@ def EditarFuente(request, id_fuente):
 #Acceso Bilbiotecolog@s
 @login_required(login_url='/Login/')
 def AccesoBiblio(request):
-    return render(request, "AccesoBiblio.html")
+    return render(request, "bibliotecologos(as)/AccesoBiblio.html")
 
 @login_required(login_url='/Login/')
 def Estadisticas(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    return render(request, "Estadisticas.html")
+    return render(request, "equipo_u3i/Estadisticas.html")
 
 @login_required(login_url='/Login/')
 def PanelDeControl(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    return render(request, "PanelDeControl.html")
+    return render(request, "equipo_u3i/PanelDeControl.html")
 
 def Boletines(request):
     form = BusquedaBoletinForm(request.GET or None)
@@ -391,7 +391,7 @@ def Boletines(request):
         elif ordenar_por == 'desc':
             boletines = boletines.order_by('-fecha_boletin')
 
-    return render(request, 'boletines.html', {
+    return render(request, 'general/boletines.html', {
         'form': form,
         'boletines': boletines,
         'tags_conteo': tags_conteo,
