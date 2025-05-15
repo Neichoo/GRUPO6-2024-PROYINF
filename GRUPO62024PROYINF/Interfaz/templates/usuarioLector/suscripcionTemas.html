@@ -1,0 +1,59 @@
+{% load static %}
+<h1 class="bienvenida">Bienvenid@, {{ user.usuariolector.usuario }}</h1>
+<div class="inicio-lector">
+    <div class="dashboard">
+        <h2 class="titulo-card">Boletines suscritos últimos 7 días</h2>
+        <div class="boletines-container">
+            <ul>
+                {% for boletin in boletines %}
+                    <li>
+                        <h2>{{ boletin.nombre_boletin }}</h2>
+                        <p><strong>Fecha de publicación:</strong> {{ boletin.fecha_boletin }}</p>
+                        <p><strong>Tags:</strong> 
+                            {{ boletin.tags_boletin.all|join:", " }}
+                        </p>
+                        <p><strong>Ver PDF:</strong> 
+                            <a href="{{ boletin.url_pdf.url }}" target="_blank">Descargar PDF</a>
+                        </p>
+                    </li>
+                {% empty %}
+                    <li>No hay boletines a mostrar.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="suscripcion-temas">
+        <h2 class="suscripcion-titulo">Selecciona un tema para recibir nuestros boletines más recientes.</h2>
+        {% if messages %}
+            <div class="mensajes-suscripcion">
+                {% for message in messages %}
+                    {% if 'suscripcion' in message.tags %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                            <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="temas-container">
+            <ul>
+                {% for tema in temas %}
+                    <li>
+                        <h2>{{ tema.nombre }}</h2>
+                        <!--Aca agregar logica para meter los temas. Tambien agregar el boton para suscribirse y desuscribirse.-->
+                        <div class="botones">
+                            {% if tema in tagsSuscritos %}
+                                <a href="{% url 'desuscribirTema' tema.nombre %}" class="desuscribir">Desuscribir</a>
+                            {% else %}
+                                <a href="{% url 'suscribirTema' tema.nombre %}" class="suscribir">Seguir</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% empty %}
+                    <li>No hay temas a mostrar.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

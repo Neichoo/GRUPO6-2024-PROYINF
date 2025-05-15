@@ -70,3 +70,57 @@ align-items: center;
     background-color: #ff9933;
     color: white;
 }
+
+
+.mensajes-notificacion {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  z-index: 9999;
+}
+
+.mensajes-notificacion .alert {
+  position: relative;
+  padding: 15px 40px 15px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.mensajes-notificacion .alert-success {
+  background-color: #4CAF50;
+}
+
+.mensajes-notificacion .alert-error {
+  background-color: #f44336;
+}
+
+.mensajes-notificacion .alert-warning {
+  background-color: #ff9800;
+}
+
+.mensajes-notificacion .alert-info {
+  background-color: #2196F3;
+}
+
+.mensajes-notificacion .close-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.mensajes-notificacion .close-btn:hover {
+  color: #ccc;
+}

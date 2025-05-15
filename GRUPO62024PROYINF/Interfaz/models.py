@@ -59,7 +59,8 @@ class Empleado(models.Model):
 class UsuarioLector(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
     #placeholder
-    preferencias = models.CharField(max_length=50, default='')
+    preferenciasTags = models.ManyToManyField(TagBoletin)
+    boletinesNuevos = models.ManyToManyField(Boletin, blank=True)
     notificaciones = models.BooleanField(default=True)
 
 

@@ -5,6 +5,19 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    min-height: 100vh;
     background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
+}
+
+.contenido-principal {
+    flex: 1;
+}
+
+.bienvenida {
+    color: white;
+    position: relative;
+    margin-top: 20px;
+    font-size: 24px;
+    text-align: left;
+    padding-left: 20px;
 }

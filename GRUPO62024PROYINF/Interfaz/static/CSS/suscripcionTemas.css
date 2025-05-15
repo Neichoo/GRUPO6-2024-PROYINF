@@ -1,0 +1,269 @@
+
+.inicio-lector {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+}
+
+.dashboard {
+    flex: 1;
+    padding: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start; /* Alinea la card arriba */
+}
+
+/* Título de la card */
+.titulo-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Muestra boletines */    
+.boletines-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.boletines-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.boletines-container ul li {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.boletines-container ul li:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.boletines-container ul li h2 {
+    font-size: 24px;
+    color: #004466;
+    margin-bottom: 10px;
+}
+
+.boletines-container ul li p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.boletines-container ul li p strong {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.boletines-container ul li a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.boletines-container ul li a:hover {
+    background-color: #2980b9;
+}
+
+/* Estilo para la Suscripción o Temas (derecha) */
+.suscripcion-temas {
+    flex: 1;
+    padding: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start; /* Alinea la card arriba */
+}
+
+.suscripcion-titulo {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Muestra temas disponibles*/
+.temas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.temas-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.temas-container ul li {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.temas-container ul li:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.temas-container ul li h2 {
+    font-size: 24px;
+    color: #004466;
+    margin-bottom: 10px;
+}
+
+.temas-container ul li p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.temas-container ul li p strong {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.botones {
+    width: 100%; /* Ocupa todo el ancho del contenedor padre */
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Espacia los elementos */
+    align-items: flex-start;
+    gap: 80px; /* Espacio uniforme entre ellos */
+    padding: 0px;
+}
+
+.suscribir {
+    display: inline-block;
+    padding: 15px 20px; /* más altura y ancho */
+    font-size: 18px; /* texto más grande */
+    background-color: #0dc632;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.suscribir:hover {
+    background-color: #0f9d0a;
+}
+
+.desuscribir {
+    display: inline-block;
+    padding: 15px 20px; /* más altura y ancho */
+    font-size: 18px; /* texto más grande */
+    background-color: #d21d1d;
+    color: white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.desuscribir:hover {
+    background-color: #9a0707;
+}
+
+.mensajes-suscripcion {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 300px;
+  z-index: 9999;
+}
+
+.mensajes-suscripcion .alert {
+  position: relative;
+  padding: 15px 40px 15px 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.mensajes-suscripcion .alert-success {
+  background-color: #4CAF50;
+}
+
+.mensajes-suscripcion .alert-error {
+  background-color: #f44336;
+}
+
+.mensajes-suscripcion .alert-warning {
+  background-color: #ff9800;
+}
+
+.mensajes-suscripcion .alert-info {
+  background-color: #2196F3;
+}
+
+.mensajes-suscripcion .close-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.mensajes-suscripcion .close-btn:hover {
+  color: #ccc;
+}

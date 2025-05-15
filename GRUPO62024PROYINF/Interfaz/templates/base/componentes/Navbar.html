@@ -33,6 +33,18 @@
                 <li class="botoncin"><a href="{% url 'Sobre_vigifia' %}">Sobre VIGIFIA</a></li>
                 <li class="botoncin"><a href="{% url 'Contacto' %}">Contacto</a></li>
                 <li class="acceso-usuario"><a href="{% url 'Logout' %}">Cerrar Sesión</a></li>
+                {% if messages %}
+                    <div class="mensajes-notificacion">
+                        {% for message in messages %}
+                            {% if 'notificacion' in message.tags %}
+                            <div class="alert alert-success">
+                                {{ message }}
+                                <button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             {% endif %}
         </ul>
     {% endif %}

@@ -7,10 +7,25 @@
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Inicio.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/suscripcionTemas.css' %}">
 </head>
 
 <body>
-    {% include 'base/componentes/Navbar.html' %}
+    <div class="contenido-principal">
+        {% include 'base/componentes/Navbar.html' %}
+
+        {% if not user.is_authenticated %}
+        {% else %}
+            {% if user.Empleado %}
+                {% if user.Empleado.tipo == "EquipoU3I" %}
+                {% elif user.empleado.tipo == "Bibliotecologo/a" %}
+            {% endif %}
+            {% elif user.usuariolector %}
+                {% include 'usuarioLector/suscripcionTemas.html' %}
+            {% endif %}
+        {% endif %}
+    </div>
+
     {% include 'base/componentes/Footer.html' %}
 </body>
 </html>

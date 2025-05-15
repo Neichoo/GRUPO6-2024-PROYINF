@@ -12,8 +12,20 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes
 from django.http import HttpResponseForbidden
+from django.utils import timezone
+from datetime import timedelta
 
 def Inicio(request):
+    if request.user.is_authenticated:
+        if request.user.usuariolector:
+            #Agregar tags si el usuario esta logueado
+            tags, boletines, tagsSuscritos = dashboardLector(request)
+            boletines_nuevos = request.user.usuariolector.boletinesNuevos.all()
+            if boletines_nuevos.exists():
+                nombres = ', '.join([b.nombre_boletin for b in boletines_nuevos])
+                messages.success(request, f"Tienes boletines nuevos: {nombres}", extra_tags='notificacion')
+                request.user.usuariolector.boletinesNuevos.clear()
+            return render(request, "general/Inicio.html", {'temas': tags, 'boletines': boletines, 'tagsSuscritos': tagsSuscritos})
     return render(request, "general/Inicio.html")
 
 def Sobre_vigifia(request):
@@ -218,6 +230,9 @@ def crear_boletin(request):
             boletin.save()  # Guardar la relación ManyToMany
             messages.success(request, "Boletín registrado exitosamente")
 
+            #Mandar notificacion a todos los usuarios inscritos a la tag respectiva
+            notificacionLector(boletin)
+
         return redirect('/SubirBoletin/')  # Redirigir después de crear el boletín
 
     # Obtener todos los tags disponibles para mostrarlos en el formulario
@@ -397,3 +412,36 @@ def Boletines(request):
         'tags_conteo': tags_conteo,
         'selected_tags': selected_tags,
     })
+
+def dashboardLector(request):
+    #Agregar tags si el usuario esta logueado
+    tags = TagBoletin.objects.all()
+    tagsSuscritos = request.user.usuariolector.preferenciasTags.all()
+
+    hace_7_dias = timezone.now().date() - timedelta(days=7)
+
+    boletines = Boletin.objects.filter(
+        tags_boletin__in=tagsSuscritos,
+        fecha_boletin__gte=hace_7_dias
+    ).distinct()
+
+    return (tags, boletines, tagsSuscritos)
+
+def suscribirTema(request, nombreTema):
+    if request.user.is_authenticated and hasattr(request.user, 'usuariolector'):
+        tema = TagBoletin.objects.get(nombre=nombreTema)
+        request.user.usuariolector.preferenciasTags.add(tema)
+        messages.success(request, f"Te has suscrito al tema '{tema.nombre}' exitosamente.", extra_tags='suscripcion')
+    return redirect('Inicio')
+
+def desuscribirTema(request, nombreTema):
+    if request.user.is_authenticated and hasattr(request.user, 'usuariolector'):
+        tema = TagBoletin.objects.get(nombre=nombreTema)
+        request.user.usuariolector.preferenciasTags.remove(tema)
+        messages.success(request, f"Te has desuscrito del tema '{tema.nombre}' exitosamente.", extra_tags='suscripcion')
+    return redirect('Inicio')
+
+def notificacionLector(boletin):
+    lectores = UsuarioLector.objects.filter(preferenciasTags__in=boletin.tags_boletin.all()).distinct()
+    for lector in lectores:
+        lector.boletinesNuevos.add(boletin)

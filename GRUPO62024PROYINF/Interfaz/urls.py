@@ -32,4 +32,6 @@ urlpatterns = [
     path('SubirBoletin/', views.crear_boletin, name='crear_boletin'),
     path('BorrarBoletin/', views.BorrarBoletin, name='BorrarBoletin'),
     path('BorradoBoletin/<id_boletin>/', views.BorradoBoletin, name='BorradoBoletin'),
+    path('suscribirTema/<nombreTema>/', views.suscribirTema, name='suscribirTema'),
+    path('desuscribirTema/<nombreTema>/', views.desuscribirTema, name='desuscribirTema'),
 ]
