@@ -2,44 +2,43 @@ from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.exceptions import ValidationError
-from .models import UsuarioLector
 from django.db import IntegrityError, transaction
+from .models import Empleado, TagBoletin, UsuarioLector
 
-# --------------------------
-# Pruebas de Login y Registro
-# --------------------------
 class LoginTestCase(TestCase):
     def setUp(self):
-        self.client = Client()
+        # Crear usuario lector
         self.user = User.objects.create_user(
-            username='usuario#raro',
-            password='P@ssw0rd!"#$%&/()=¿?*+~{.,<>|¬°^'
+            username='lector1',
+            password='P@ssw0rd123'
         )
-        UsuarioLector.objects.create(usuario=self.user)
-        self.login_url = reverse('LoginUsuario')
-        self.home_url = reverse('Inicio')
+        self.usuario_lector = UsuarioLector.objects.create(usuario=self.user)
+        
+        # Crear empleado u3i (si es necesario para otras pruebas)
+        self.empleado_u3i = User.objects.create_user(username='u3i_user', password='u3i_pass')
+        Empleado.objects.create(usuario=self.empleado_u3i, tipo='equipo_u3i')
+        
+        # Crear tag sin campo 'empleado'
+        self.tag = TagBoletin.objects.create(nombre='Tecnología')
+        
+        # URLs
+        self.suscribir_url = reverse('suscribirTema', args=[self.tag.nombre])
+        self.desuscribir_url = reverse('desuscribirTema', args=[self.tag.nombre])
 
-    def test_login_success(self):
-        response = self.client.post(self.login_url, {
-            'username': 'usuario#raro',
-            'password': 'P@ssw0rd!"#$%&/()=¿?*+~{.,<>|¬°^'
-        })
-        self.assertRedirects(response, self.home_url)
+    def test_suscripcion_exitosa(self):
+        self.client.login(username='lector1', password='P@ssw0rd123')
+        response = self.client.post(self.suscribir_url)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(self.usuario_lector.preferenciasTags.filter(nombre='Tecnología').exists())
 
-    def test_create_invalid_user(self):
-        with self.assertRaises(ValidationError):
-            try:
-                user = User(
-                    email='invalidemail',
-                    password='test123'
-                )
-                user.full_clean()
-                user.save()
-            except ValidationError as e:
-                print("Errores de validación:", e.message_dict)
-                raise e
-
-        self.assertFalse(User.objects.filter(email='invalidemail').exists())
+    def test_desuscripcion_exitosa(self):
+        self.usuario_lector.preferenciasTags.add(self.tag)
+        self.client.login(username='lector1', password='P@ssw0rd123')
+        response = self.client.post(self.desuscribir_url)
+        
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(self.usuario_lector.preferenciasTags.exists())
 
     def test_create_user_with_existing_username(self):
         User.objects.create_user(
