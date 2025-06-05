@@ -50,7 +50,7 @@ def Register_usuario(request):
             messages.error(request, 'Las contraseñas no coinciden')
         elif User.objects.filter(username=username).exists():
            messages.error(request, 'El usuario ya existe')
-        elif User.objects.filter(email=email).exists():
+        elif User.objects.filter(email__iexact=email).count() >= 1:
             messages.error(request, 'El correo ya está registrado')
         else:
             user = User.objects.create_user(username=username, password=password, email=email)
