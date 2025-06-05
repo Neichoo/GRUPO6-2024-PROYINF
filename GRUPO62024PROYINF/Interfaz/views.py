@@ -17,15 +17,17 @@ from datetime import timedelta
 
 def Inicio(request):
     if request.user.is_authenticated:
-        if request.user.usuariolector:
-            #Agregar tags si el usuario esta logueado
+        try:
+            lector = request.user.usuariolector  # acceder correctamente al objeto relacionado
             tags, boletines, tagsSuscritos = dashboardLector(request)
-            boletines_nuevos = request.user.usuariolector.boletinesNuevos.all()
+            boletines_nuevos = lector.boletinesNuevos.all()
             if boletines_nuevos.exists():
                 nombres = ', '.join([b.nombre_boletin for b in boletines_nuevos])
                 messages.success(request, f"Tienes boletines nuevos: {nombres}", extra_tags='notificacion')
-                request.user.usuariolector.boletinesNuevos.clear()
+                lector.boletinesNuevos.clear()
             return render(request, "general/Inicio.html", {'temas': tags, 'boletines': boletines, 'tagsSuscritos': tagsSuscritos})
+        except UsuarioLector.DoesNotExist:
+            return render(request, "general/Inicio.html")
     return render(request, "general/Inicio.html")
 
 def Sobre_vigifia(request):
@@ -47,7 +49,7 @@ def Register_usuario(request):
         if password != confirm:
             messages.error(request, 'Las contraseñas no coinciden')
         elif User.objects.filter(username=username).exists():
-            messages.error(request, 'El usuario ya existe')
+           messages.error(request, 'El usuario ya existe')
         elif User.objects.filter(email=email).exists():
             messages.error(request, 'El correo ya está registrado')
         else:
