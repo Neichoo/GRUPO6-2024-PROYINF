@@ -28,6 +28,9 @@ el comando "pip install django". Si la versión de Django no es la 5.1.1, actual
     * Para acceder como miembro del equipo de bibliotecólog@s:
       * Usuario: "Pepiño"
       * Contraseña: "fasilongo123"
+    * Para acceder como usuario lector:
+      * Usuario: "wiwemer"
+      * Contraseña: "wiwemo2273"
     
 # Videos:
 * [Presentación del Cliente](https://youtu.be/abJau21SDIk?si=tvCJ4hAYGWEmOwB1)
