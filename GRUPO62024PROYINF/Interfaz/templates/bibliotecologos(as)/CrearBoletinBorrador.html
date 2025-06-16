@@ -7,10 +7,68 @@
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/CrearBoletinBorrador.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+
+    <!-- Editor PDF-->
+    <title>Editor con TinyMCE</title>
+    <script src="https://cdn.tiny.cloud/1/dn8swrrkyf5nwaeh6hhmt0tabrog4l03n4bn7uzwzwdk7k1t/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+    tinymce.init({
+        selector: 'textarea#basic-example',
+        height: 500,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+        });
+    </script>
 </head>
 <body>
     {% include 'base/componentes/Navbar.html' %}
     
+  <form method="POST" action="/guardar">
+    <textarea id="basic-example">
+        <h1 style="color: #216c2c;">Titulo Boletin</h1>
+
+        <p style="color: #000000;">
+        Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentario, la Fundación para la Innovación Agraria presenta este boletín generado mediante vigilancia estratégica. Este informe cubre temas como {{temas_principales}} y está optimizado para consulta en dispositivos móviles.
+        </p>
+
+        <ul style="color: #000000;">
+        <li>Una <strong>fuente básica</strong> de información tecnológica</li>
+        <li>Un boletín <strong>especializado</strong> sobre {{lineamiento}}</li>
+        <li>Un resumen 🧠 para tomadores de decisión</li>
+        <li>Un informe adaptable a <code>&lt;contexto&gt;</code> regional</li>
+        <li>Una herramienta de monitoreo climático y agrícola</li>
+        </ul>
+
+        <h2 style="color: #216c2c;">Últimas noticias destacadas</h2>
+
+        <h3 style="color: #ffffff; background-color: #216c2c;">noticia_1_titulo</h3>
+        <p><em>noticia_1_fecha</em></p>
+        <p>noticia_1_resumen</p>
+        <p><a href="{{noticia_1_url}}" target="_blank">Ver más</a></p>
+
+        <h3 style="color: #ffffff; background-color: #216c2c;">noticia_2_titulo</h3>
+        <p><em>noticia_2_fecha</em></p>
+        <p>noticia_2_resumen</p>
+        <p><a href="{{noticia_2_url}}" target="_blank">Ver más</a></p>
+
+        <hr>
+
+        <h2 style="color: #216c2c;">Contacto y Créditos</h2>
+        <p>Fundación para la Innovación Agraria – FIA</p>
+        <p>Boletín N°{{numero_boletin}} – {{mes}} {{año}}</p>
+
+    </textarea>
+    <br>
+    <button type="submit">Guardar plantilla</button>
+  </form>
    
     {% include 'base/componentes/Footer.html' %}
 </body>
