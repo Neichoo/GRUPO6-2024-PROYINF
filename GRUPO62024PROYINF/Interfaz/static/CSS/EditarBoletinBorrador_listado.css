@@ -1,0 +1,126 @@
+/* EditarBoletinBorrador_listado.css - Versión mejorada */
+
+body {
+    background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.contenedor-borradores {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    margin: 40px auto;
+    max-width: 900px;
+    width: 90%;
+}
+
+.contenedor-borradores h1 {
+    color: #004466;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.lista-borradores {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.borrador-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid #3498db;
+}
+
+.borrador-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.borrador-item h3 {
+    color: #004466;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.borrador-item p {
+    color: #555;
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.borrador-item p strong {
+    color: #3498db;
+}
+
+.botones-borrador {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-editar, .btn-ver-pdf {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    flex: 1;
+}
+
+.btn-editar {
+    background-color: #3498db;
+    color: white;
+    border: 2px solid #3498db;
+}
+
+.btn-editar:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-ver-pdf {
+    background-color: transparent;
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+
+.btn-ver-pdf:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+.contenedor-borradores > p {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .contenedor-borradores {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .botones-borrador {
+        flex-direction: column;
+    }
+}

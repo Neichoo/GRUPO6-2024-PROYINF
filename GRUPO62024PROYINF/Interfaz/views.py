@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes
 from django.http import HttpResponseForbidden
+from django.core.files import File
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
@@ -250,6 +251,8 @@ def subir_boletin_publicado(request):
 
 @login_required(login_url='/Login/')
 def CrearBoletinBorrador(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     if request.method == 'POST':
         contenido_html = request.POST.get('basic-example', '')  # Asegura un string vacío si es None
         nombre_boletin = request.POST.get('nombre_boletin', 'Borrador sin título')
@@ -285,8 +288,96 @@ def CrearBoletinBorrador(request):
     return render(request, 'bibliotecologos(as)/CrearBoletinBorrador.html')
 
 @login_required(login_url='/Login/')
-def EditarBoletinBorrador(request):
-    return render(request, 'bibliotecologos(as)/EditarBoletinBorrador.html')
+def BoletinBorrador_listado(request):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+    form = BusquedaBoletinForm(request.GET or None)
+    boletines = BoletinBorrador.objects.all()
+    tags_conteo = TagBoletin.objects.all()
+    selected_tags = request.GET.getlist('filter')
+
+    if form.is_valid():
+        query = form.cleaned_data.get('query')
+        fecha_desde = form.cleaned_data.get('fecha_desde')
+        fecha_hasta = form.cleaned_data.get('fecha_hasta')
+        ordenar_por = form.cleaned_data.get('ordenar_por')
+
+        if query:
+            boletines = boletines.filter(Q(nombre_boletin__icontains=query))
+        
+        if selected_tags:
+            for tag in selected_tags:
+                boletines = boletines.filter(tags_boletin__nombre=tag)
+
+        if fecha_desde:
+            boletines = boletines.filter(fecha_boletin__gte=fecha_desde)
+
+        if fecha_hasta:
+            boletines = boletines.filter(fecha_boletin__lte=fecha_hasta)
+
+        if ordenar_por == 'asc':
+            boletines = boletines.order_by('fecha_boletin')
+        elif ordenar_por == 'desc':
+            boletines = boletines.order_by('-fecha_boletin')
+
+    return render(request, 'bibliotecologos(as)/EditarBoletinBorrador_listado.html', {
+        'form': form,
+        'boletines': boletines,
+        'tags_conteo': tags_conteo,
+        'selected_tags': selected_tags,
+    })
+
+@login_required(login_url='/Login/')
+def EditarBoletinBorrador(request, id_boletin):
+    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+    
+    boletin = get_object_or_404(BoletinBorrador, id_boletin=id_boletin)
+
+    if request.method == 'POST':
+        nuevo_contenido = request.POST.get('basic-example', '')
+        nombre_boletin = request.POST.get('nombre_boletin', '').strip()
+
+        # Validación de campos
+        if not nombre_boletin:
+            messages.error(request, 'El nombre del boletín no puede estar vacío.')
+            return redirect('EditarBoletinBorrador', id_boletin=id_boletin)
+            
+        if not nuevo_contenido.strip():
+            messages.error(request, 'El contenido del boletín no puede estar vacío.')
+            return redirect('EditarBoletinBorrador', id_boletin=id_boletin)
+
+        try:
+            # Actualizar campos básicos
+            boletin.nombre_boletin = nombre_boletin
+            boletin.contenido_html = nuevo_contenido
+            boletin.fecha_boletin = timezone.now().date()
+
+            # Generar nuevo PDF
+            pdf_filename = f"boletin_{uuid.uuid4().hex[:6]}.pdf"
+            pdf_path = os.path.join(settings.MEDIA_ROOT, 'PDF', pdf_filename)
+            os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+            
+            HTML(string=nuevo_contenido).write_pdf(pdf_path)
+
+            # Actualizar archivo PDF
+            with open(pdf_path, 'rb') as pdf_file:
+                django_file = File(pdf_file)
+                boletin.url_pdf.save(pdf_filename, django_file, save=False)
+
+            # Guardar todos los cambios
+            boletin.save()
+
+            messages.success(request, '¡Boletín actualizado correctamente!')
+            return redirect('AccesoBiblio')
+
+        except Exception as e:
+            messages.error(request, f'Error al actualizar el boletín: {str(e)}')
+            return redirect('EditarBoletinBorrador', id_boletin=id_boletin)
+
+    return render(request, 'bibliotecologos(as)/EditarBoletinBorrador_editar.html', {
+        'boletin': boletin
+    })
 
 @login_required(login_url='/Login/')
 def BorrarBoletin(request):
@@ -310,6 +401,7 @@ def IngresarFuente(request):
     return render(request, 'equipo_u3i/IngresarFuente.html', {
         'tags_conteo': tags_conteo
     })
+
 @login_required(login_url='/Login/')
 def IngresoFuente(request):
     if request.method == "POST":

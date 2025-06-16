@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>VIGIFIA: Editar Borradores</title>
+    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/EditarBoletinBorrador_listado.css' %}">
+</head>
+<body>
+    {% include 'base/componentes/Navbar.html' %}
+
+    <div class="contenedor-borradores">
+        <h1>Boletines en Borrador</h1>
+
+        {% if boletines %}
+            <ul class="lista-borradores">
+                {% for boletin in boletines %}
+                    <li class="borrador-item">
+                        <h3>{{ boletin.nombre_boletin }}</h3>
+                        <p><strong>Última edición:</strong> 
+                            {% if boletin.fecha_modificacion %}
+                                {{ boletin.fecha_modificacion|date:"d/m/Y H:i" }}
+                            {% else %}
+                                {{ boletin.fecha_boletin|date:"d/m/Y" }}
+                            {% endif %}
+                        </p>
+                        <div class="botones-borrador">
+                            <a href="{% url 'editar_borrador' boletin.id_boletin %}" class="btn-editar">Editar</a>
+                            <a href="{{ boletin.url_pdf.url }}" target="_blank" class="btn-ver-pdf">Ver PDF</a>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No hay boletines en borrador por el momento.</p>
+        {% endif %}
+    </div>
+
+    {% include 'base/componentes/Footer.html' %}
+</body>
+</html>

@@ -10,12 +10,6 @@ body {
     background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
 }
 
-/* For other boilerplate styles, see: https://www.tiny.cloud/docs/tinymce/7/editor-content-css/ */
-/*
-* For rendering images inserted using the image plugin.
-* Includes image captions using the HTML5 figure element.
-*/
-
 figure.image {
   display: inline-block;
   border: 1px solid gray;
@@ -40,11 +34,6 @@ figure.image figcaption {
   text-align: center;
 }
 
-/*
- Alignment using classes rather than inline styles
- check out the "formats" option
-*/
-
 img.align-left {
   float: left;
 }
@@ -53,7 +42,7 @@ img.align-right {
   float: right;
 }
 
-/* Basic styles for Table of Contents plugin (tableofcontents) */
+
 .mce-toc {
   border: 1px solid gray;
 }
@@ -98,3 +87,38 @@ img.align-right {
 .btn-pdf:hover {
     background: #1a4b7e;
 }
+
+.btn-actualizar {
+    background: #287b39; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-actualizar:hover {
+    background: #1f5c2a;
+}
+
+.btn-cancelar {
+    background: #b12c2c; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+}
+
+.btn-cancelar:hover {
+    background: #7e1a1a;
+}
+

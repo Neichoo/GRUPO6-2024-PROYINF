@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>VIGIFIA: Editar Boletín</title>
+    <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/CrearBoletinBorrador.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
+
+    <!-- TinyMCE Editor -->
+    <script src="https://cdn.tiny.cloud/1/dn8swrrkyf5nwaeh6hhmt0tabrog4l03n4bn7uzwzwdk7k1t/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+    tinymce.init({
+        selector: 'textarea#basic-example',
+        height: 500,
+        plugins: [
+            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+            'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | blocks | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
+    });
+    </script>
+</head>
+<body>
+    {% include 'base/componentes/Navbar.html' %}
+
+    <form method="POST" action="{% url 'editar_borrador' boletin.id_boletin %}" id="form-editar">
+        {% csrf_token %}
+        <input type="text" name="nombre_boletin" placeholder="Nombre del boletín" class="campo-nombre" value="{{ boletin.nombre_boletin }}">
+
+        <textarea id="basic-example" name="basic-example">{{ boletin.contenido_html|safe }}</textarea>
+
+        <br>
+        <div class="botones">
+            <button type="submit" class="btn-actualizar">Actualizar boletín</button>
+            <a href="{% url 'lista_borradores' %}" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+
+    {% include 'base/componentes/Footer.html' %}
+</body>
+</html>
