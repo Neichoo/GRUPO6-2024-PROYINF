@@ -204,7 +204,7 @@ def BoletinBiblio(request):
     return render(request, "bibliotecologos(as)/BoletinBiblio.html")
 
 @login_required(login_url='/Login/')
-def crear_boletin(request):
+def subir_boletin_publicado(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     if request.method == "POST":
@@ -239,9 +239,17 @@ def crear_boletin(request):
 
     # Obtener todos los tags disponibles para mostrarlos en el formulario
     tags_conteo = TagBoletin.objects.all()
-    return render(request, 'bibliotecologos(as)/SubirBoletin.html', {
+    return render(request, 'bibliotecologos(as)/SubirBoletinPublicado.html', {
         'tags_conteo': tags_conteo
     })
+
+@login_required(login_url='/Login/')
+def CrearBoletinBorrador(request):
+    return render(request, 'bibliotecologos(as)/CrearBoletinBorrador.html')
+
+@login_required(login_url='/Login/')
+def EditarBoletinBorrador(request):
+    return render(request, 'bibliotecologos(as)/EditarBoletinBorrador.html')
 
 @login_required(login_url='/Login/')
 def BorrarBoletin(request):

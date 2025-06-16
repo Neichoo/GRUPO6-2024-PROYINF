@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .button-container {
@@ -47,4 +48,24 @@ body {
 
 .btn-red:hover {
     background-color: #c82333;
+}
+
+.btn-blue {
+    background-color: #007bff; 
+    color: white;
+    border: none;
+}
+
+.btn-blue:hover {
+    background-color: #0069d9;  
+}
+
+.btn-orange {
+    background-color: #fd7e14;  
+    color: white;
+    border: none;
+}
+
+.btn-orange:hover {
+    background-color: #e36209;
 }

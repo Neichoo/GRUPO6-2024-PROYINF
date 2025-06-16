@@ -3,7 +3,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
-    <title>VIGIFIA: Boletines</title>
+    <title>VIGIFIA: Boletínes</title>
     <link rel="stylesheet" href="{% static 'CSS/Navbar.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/BoletinBiblio.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
@@ -12,11 +12,12 @@
     {% include 'base/componentes/Navbar.html' %}
     
     <div class="button-container">
-        <a href="/SubirBoletin/" class="btn btn-green">Ingresar Boletin</a>
+        <a href="/SubirBoletinPublicado/" class="btn btn-green">Subir Boletin</a>
+        <a href="/CrearBoletinBorrador/" class="btn btn-blue">Crear Boletin</a>
+        <a href="/EditarBoletinBorrador/" class="btn btn-orange">Editar Boletin</a>
         <a href="/BorrarBoletin/" class="btn btn-red">Borrar Boletin</a>
     </div>
    
     {% include 'base/componentes/Footer.html' %}
-    <script src="{% static 'JS/filterSidebar.js' %}"></script>
 </body>
 </html>

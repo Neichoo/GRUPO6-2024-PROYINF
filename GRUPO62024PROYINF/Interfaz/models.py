@@ -78,3 +78,13 @@ def get_usuariolector(self):
     
 User.add_to_class("Empleado", property(get_empleado))
 User.add_to_class("UsuarioLector", property(get_usuariolector))
+
+class BoletinBorrador(models.Model):
+    id_boletin = models.AutoField(primary_key=True)
+    nombre_boletin = models.CharField(max_length=100)
+    tags_boletin = models.ManyToManyField(TagBoletin)
+    fecha_boletin = models.DateField()
+    url_pdf = models.FileField(upload_to='PDF/')
+    
+    def __str__(self):
+        return self.nombre_boletin
