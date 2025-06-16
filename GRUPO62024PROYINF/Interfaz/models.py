@@ -84,6 +84,7 @@ class BoletinBorrador(models.Model):
     nombre_boletin = models.CharField(max_length=100)
     tags_boletin = models.ManyToManyField(TagBoletin)
     fecha_boletin = models.DateField()
+    contenido_html = models.TextField(blank=True)
     url_pdf = models.FileField(upload_to='PDF/')
     
     def __str__(self):

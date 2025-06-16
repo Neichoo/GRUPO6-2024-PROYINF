@@ -65,3 +65,36 @@ img.align-right {
 .mce-toc li {
   list-style-type: none;
 }
+
+.botones {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-guardar, .btn-pdf {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-guardar {
+    background: #216c2c;
+    color: white;
+}
+
+.btn-pdf {
+    background: #2c6cb1;
+    color: white;
+}
+
+.btn-guardar:hover {
+    background: #1a5223;
+}
+
+.btn-pdf:hover {
+    background: #1a4b7e;
+}

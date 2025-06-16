@@ -10,8 +10,22 @@
 </head>
 <body>
     {% include 'base/componentes/Navbar.html' %}
-    <h1>Bienvenid@, Bibliotecólog@</h1>
-    <p>Aquí se mostrará contenido específico para bibliotecólog@s.</p>
+    {% if messages %}
+        <div id="notificaciones">
+            {% for message in messages %}
+            <div class="notificacion {{ message.tags }}">
+                <span class="cerrar" onclick="this.parentElement.style.display='none';">&times;</span>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+    <div class="contenido-central">
+        <h1>Bienvenid@, Bibliotecólog@</h1>
+        <p>Aquí se mostrará contenido específico para bibliotecólog@s.</p>
+    </div>
     {% include 'base/componentes/Footer.html' %}
 </body>
 </html>

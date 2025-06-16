@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
-from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo, UsuarioLector
+from .models import Boletin, TagBoletin, TagFuente, Empleado, FuentesInfo, UsuarioLector, BoletinBorrador
 from .forms import BusquedaBoletinForm, BusquedaFuenteForm
 from django.db.models import Q
 from django.core.mail import send_mail
@@ -14,6 +14,11 @@ from django.utils.encoding import force_bytes
 from django.http import HttpResponseForbidden
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
+import os
+from weasyprint import HTML
+from django.utils import timezone
+import uuid
 
 def Inicio(request):
     if request.user.is_authenticated:
@@ -245,6 +250,38 @@ def subir_boletin_publicado(request):
 
 @login_required(login_url='/Login/')
 def CrearBoletinBorrador(request):
+    if request.method == 'POST':
+        contenido_html = request.POST.get('basic-example', '')  # Asegura un string vacío si es None
+        nombre_boletin = request.POST.get('nombre_boletin', 'Borrador sin título')
+
+        if not contenido_html.strip():  # Valida que el contenido no esté vacío
+            messages.error(request, 'El contenido del boletín no puede estar vacío.')
+            return redirect('CrearBoletinBorrador')
+
+        try:
+            # Generar PDF
+            pdf_filename = f"boletin_{uuid.uuid4().hex[:6]}.pdf"
+            pdf_path = os.path.join(settings.MEDIA_ROOT, 'PDF', pdf_filename)
+            os.makedirs(os.path.dirname(pdf_path), exist_ok=True)
+            
+            # Usa WeasyPrint con el contenido HTML
+            HTML(string=contenido_html).write_pdf(pdf_path)
+
+            # Guardar en la base de datos
+            borrador = BoletinBorrador.objects.create(
+                nombre_boletin=nombre_boletin,
+                contenido_html=contenido_html,
+                fecha_boletin=timezone.now().date(),
+                url_pdf=f'PDF/{pdf_filename}'
+            )
+
+            messages.success(request, '¡Borrador y PDF guardados correctamente!')
+            return redirect('AccesoBiblio')
+
+        except Exception as e:
+            messages.error(request, f'Error al generar el PDF: {str(e)}')
+            return redirect('CrearBoletinBorrador')
+
     return render(request, 'bibliotecologos(as)/CrearBoletinBorrador.html')
 
 @login_required(login_url='/Login/')

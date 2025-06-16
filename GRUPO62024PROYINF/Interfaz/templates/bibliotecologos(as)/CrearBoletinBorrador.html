@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="{% static 'CSS/CrearBoletinBorrador.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Footer.css' %}">
 
-    <!-- Editor PDF-->
-    <title>Editor con TinyMCE</title>
+    <!-- TinyMCE Editor -->
     <script src="https://cdn.tiny.cloud/1/dn8swrrkyf5nwaeh6hhmt0tabrog4l03n4bn7uzwzwdk7k1t/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
     tinymce.init({
@@ -25,51 +24,78 @@
         'alignright alignjustify | bullist numlist outdent indent | ' +
         'removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
-        });
+    });
     </script>
+
+    <!-- html2pdf.js para PDF local -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     {% include 'base/componentes/Navbar.html' %}
-    
-  <form method="POST" action="/guardar">
-    <textarea id="basic-example">
-        <h1 style="color: #216c2c;">Titulo Boletin</h1>
 
-        <p style="color: #000000;">
-        Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentario, la Fundación para la Innovación Agraria presenta este boletín generado mediante vigilancia estratégica. Este informe cubre temas como {{temas_principales}} y está optimizado para consulta en dispositivos móviles.
-        </p>
+    <form method="POST" action="{% url 'CrearBoletinBorrador' %}" id="form-guardar">
+        {% csrf_token %}
+        <input type="text" name="nombre_boletin" placeholder="Nombre del boletín" class="campo-nombre">
 
-        <ul style="color: #000000;">
-        <li>Una <strong>fuente básica</strong> de información tecnológica</li>
-        <li>Un boletín <strong>especializado</strong> sobre {{lineamiento}}</li>
-        <li>Un resumen 🧠 para tomadores de decisión</li>
-        <li>Un informe adaptable a <code>&lt;contexto&gt;</code> regional</li>
-        <li>Una herramienta de monitoreo climático y agrícola</li>
-        </ul>
+        <textarea id="basic-example" name="basic-example">
+<h1 style="color: #216c2c;">Titulo Boletin</h1>
 
-        <h2 style="color: #216c2c;">Últimas noticias destacadas</h2>
+<p style="color: #000000;">
+Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentario, la Fundación para la Innovación Agraria presenta este boletín generado mediante vigilancia estratégica. Este informe cubre temas como {{temas_principales}} y está optimizado para consulta en dispositivos móviles.
+</p>
 
-        <h3 style="color: #ffffff; background-color: #216c2c;">noticia_1_titulo</h3>
-        <p><em>noticia_1_fecha</em></p>
-        <p>noticia_1_resumen</p>
-        <p><a href="{{noticia_1_url}}" target="_blank">Ver más</a></p>
+<ul style="color: #000000;">
+<li>Una <strong>fuente básica</strong> de información tecnológica</li>
+<li>Un boletín <strong>especializado</strong> sobre {{lineamiento}}</li>
+<li>Un resumen 🧠 para tomadores de decisión</li>
+<li>Un informe adaptable a <code>&lt;contexto&gt;</code> regional</li>
+<li>Una herramienta de monitoreo climático y agrícola</li>
+</ul>
 
-        <h3 style="color: #ffffff; background-color: #216c2c;">noticia_2_titulo</h3>
-        <p><em>noticia_2_fecha</em></p>
-        <p>noticia_2_resumen</p>
-        <p><a href="{{noticia_2_url}}" target="_blank">Ver más</a></p>
+<h2 style="color: #216c2c;">Últimas noticias destacadas</h2>
 
-        <hr>
+<h3 style="color: #ffffff; background-color: #216c2c;">noticia_1_titulo</h3>
+<p><em>noticia_1_fecha</em></p>
+<p>noticia_1_resumen</p>
+<p><a href="{{noticia_1_url}}" target="_blank">Ver más</a></p>
 
-        <h2 style="color: #216c2c;">Contacto y Créditos</h2>
-        <p>Fundación para la Innovación Agraria – FIA</p>
-        <p>Boletín N°{{numero_boletin}} – {{mes}} {{año}}</p>
+<h3 style="color: #ffffff; background-color: #216c2c;">noticia_2_titulo</h3>
+<p><em>noticia_2_fecha</em></p>
+<p>noticia_2_resumen</p>
+<p><a href="{{noticia_2_url}}" target="_blank">Ver más</a></p>
 
-    </textarea>
-    <br>
-    <button type="submit">Guardar plantilla</button>
-  </form>
-   
+<hr>
+
+<h2 style="color: #216c2c;">Contacto y Créditos</h2>
+<p>Fundación para la Innovación Agraria – FIA</p>
+<p>Boletín N°{{numero_boletin}} – {{mes}} {{año}}</p>
+        </textarea>
+
+        <br>
+        <div class="botones">
+            <button type="submit" class="btn-guardar">Guardar borrador (BD + PDF)</button>
+            <button type="button" class="btn-pdf" onclick="descargarPDFLocal()">Descargar PDF (Solo local)</button>
+        </div>
+    </form>
+
+    <script>
+        function descargarPDFLocal() {
+            const contenido = tinymce.get('basic-example').getContent();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = contenido;
+            document.body.appendChild(tempDiv);
+
+            html2pdf().from(tempDiv).set({
+                margin: 1,
+                filename: 'boletin.pdf',
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            }).save().then(() => {
+                document.body.removeChild(tempDiv);
+            });
+        }
+    </script>
+
     {% include 'base/componentes/Footer.html' %}
 </body>
 </html>

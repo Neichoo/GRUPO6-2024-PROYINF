@@ -9,3 +9,28 @@ body {
     justify-content: space-between;
     background: linear-gradient(135deg, #4c9f70, #5c8f9e) !important;
 }
+
+/* Contenedor centrado */
+.contenido-central {
+    flex-grow: 1; /* Que ocupe el espacio disponible */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* Centrado vertical */
+    align-items: center;      /* Centrado horizontal */
+    text-align: center;       /* Centrar texto */
+    padding: 20px;
+}
+
+/* Ajustes para el título y párrafo */
+.contenido-central h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+}
+
+.contenido-central p {
+    font-size: 1.3rem;
+    max-width: 600px;
+    line-height: 1.5;
+    color: #e0e0e0;
+}
