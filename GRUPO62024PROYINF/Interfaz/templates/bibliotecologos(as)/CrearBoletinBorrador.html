@@ -38,7 +38,33 @@
         <input type="text" name="nombre_boletin" placeholder="Nombre del boletín" class="campo-nombre">
 
         <textarea id="basic-example" name="basic-example">
-<h1 style="color: #216c2c;">Titulo Boletin</h1>
+        <!-- Aqui comienza la creacion del boletín --> 
+<div style="
+    width: 816px;
+    height: 860px;
+    background-image: url('/static/IMG/portada.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    position: relative;
+">
+  <!-- Logo arriba izquierda -->
+  <img src="{% static 'IMG/Icono.png' %}" alt="Logo1" style="height: 80px; position: absolute; top: 20px; left: 20px;">
+
+  <!-- Contenedor del título con margen para separarlo del borde y del logo -->
+  <div style="background-color: rgba(33,108,44,1); color: white; padding: 20px; width: fit-content; margin-top: 120px; margin-left: 0;">
+    <h1 style="margin: 0; font-size: 1.4rem;">Titulo del boletin</h1>
+    <p style="margin: 0; font-size: 1.2rem;">09 de Junio de 2024</p>
+  </div>
+
+</div>
+<hr>
+<h1 style="color: #216c2c;">Prefacio</h1>
+<div style="height: 3px; width: 100px; background-color: #216c2c; margin-bottom: 20px;"></div>
 
 <p style="color: #000000;">
 Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentario, la Fundación para la Innovación Agraria presenta este boletín generado mediante vigilancia estratégica. Este informe cubre temas como {{temas_principales}} y está optimizado para consulta en dispositivos móviles.
@@ -51,8 +77,12 @@ Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentar
 <li>Un informe adaptable a <code>&lt;contexto&gt;</code> regional</li>
 <li>Una herramienta de monitoreo climático y agrícola</li>
 </ul>
-
-<h2 style="color: #216c2c;">Últimas noticias destacadas</h2>
+<hr>
+<h2 style="color: #216c2c;">Indice</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+<hr>
+<h2 style="color: #216c2c;">1. Noticias</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
 
 <h3 style="color: #ffffff; background-color: #216c2c;">noticia_1_titulo</h3>
 <p><em>noticia_1_fecha</em></p>
@@ -66,7 +96,94 @@ Con el objetivo de fortalecer el desarrollo sustentable del sector agroalimentar
 
 <hr>
 
+<h2 style="color: #216c2c;">2. Publicaciones Científicas</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Publicacion_1_titulo</h3>
+<p><em>Publicacion_1_fecha</em></p>
+<p>Publicacion_1_resumen</p>
+<p><a href="{{Publicacion_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Publicacion_2_titulo</h3>
+<p><em>Publicacion_2_fecha</em></p>
+<p>Publicacion_2_resumen</p>
+<p><a href="{{Publicacion_2_url}}" target="_blank">Ver más</a></p>
+
+<hr>
+
+<h2 style="color: #216c2c;">3. Patentes</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Patente_1_titulo</h3>
+<p><em>Patente_1_fecha</em></p>
+<p>Patente_1_resumen</p>
+<p><a href="{{Patente_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Patente_2_titulo</h3>
+<p><em>Patente_2_fecha</em></p>
+<p>Patente_2_resumen</p>
+<p><a href="{{Patente_2_url}}" target="_blank">Ver más</a></p>
+<hr>
+
+<h2 style="color: #216c2c;">4. Proyectos</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Proyecto_1_titulo</h3>
+<p><em>Proyecto_1_fecha</em></p>
+<p>Proyecto_1_resumen</p>
+<p><a href="{{Proyecto_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Proyecto_2_titulo</h3>
+<p><em>Proyecto_2_fecha</em></p>
+<p>Proyecto_2_resumen</p>
+<p><a href="{{Proyecto_2_url}}" target="_blank">Ver más</a></p>
+<hr>
+
+<h2 style="color: #216c2c;">5. Políticas Públicas</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Politica_1_titulo</h3>
+<p><em>Politica_1_fecha</em></p>
+<p>Politica_1_resumen</p>
+<p><a href="{{Politica_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Politica_2_titulo</h3>
+<p><em>Politica_2_fecha</em></p>
+<p>Politica_2_resumen</p>
+<p><a href="{{Politica_2_url}}" target="_blank">Ver más</a></p>
+<hr>
+
+<h2 style="color: #216c2c;">6. Mercado</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">mercado_1_titulo</h3>
+<p><em>mercado_1_fecha</em></p>
+<p>mercado_1_resumen</p>
+<p><a href="{{mercado_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">mercado_2_titulo</h3>
+<p><em>mercado_2_fecha</em></p>
+<p>mercado_2_resumen</p>
+<p><a href="{{mercado_2_url}}" target="_blank">Ver más</a></p>
+<hr>
+
+
+<h2 style="color: #216c2c;">7. Eventos</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Evento_1_titulo</h3>
+<p><em>Evento_1_fecha</em></p>
+<p>Evento_1_resumen</p>
+<p><a href="{{Evento_1_url}}" target="_blank">Ver más</a></p>
+
+<h3 style="color: #ffffff; background-color: #216c2c;">Evento_2_titulo</h3>
+<p><em>Evento_2_fecha</em></p>
+<p>Evento_2_resumen</p>
+<p><a href="{{Evento_2_url}}" target="_blank">Ver más</a></p>
+<hr>
+
 <h2 style="color: #216c2c;">Contacto y Créditos</h2>
+<div style="height: 3px; width: 100%; background-color: #216c2c; margin-bottom: 20px;"></div>
 <p>Fundación para la Innovación Agraria – FIA</p>
 <p>Boletín N°{{numero_boletin}} – {{mes}} {{año}}</p>
         </textarea>
