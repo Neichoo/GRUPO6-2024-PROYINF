@@ -18,8 +18,27 @@ from datetime import timedelta
 from django.conf import settings
 import os
 from weasyprint import HTML
+from functools import wraps
 from django.utils import timezone
 import uuid
+
+####
+def equipou3i_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
+            return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+def bibliotecologo_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
+            return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+####
 
 def Inicio(request):
     if request.user.is_authenticated:
@@ -150,10 +169,9 @@ def Logout_view(request):
     return redirect('Inicio')
 
 #FUENTES Bilbiotecolog@s
+@bibliotecologo_required
 @login_required(login_url='/Login/')
 def FuentesBiblio(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.filter(estado='Activo')
     tags_conteo = TagFuente.objects.all()
@@ -175,9 +193,8 @@ def FuentesBiblio(request):
 
 #FUENTES U3I
 @login_required(login_url='/Login/')
+@equipou3i_required
 def FuentesU3I(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     form = BusquedaFuenteForm(request.GET or None)
     fuentes = FuentesInfo.objects.all()
     tags_conteo = TagFuente.objects.all()
@@ -198,21 +215,18 @@ def FuentesU3I(request):
     })
 
 @login_required(login_url='/Login/')
+@equipou3i_required
 def TagsFuentes(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "equipo_u3i/TagsFuentes.html")
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def BoletinBiblio(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "bibliotecologos(as)/BoletinBiblio.html")
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def subir_boletin_publicado(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     if request.method == "POST":
         nombre_boletin = request.POST['nombre_boletin']
         fecha_boletin = request.POST['fecha_boletin']
@@ -250,9 +264,8 @@ def subir_boletin_publicado(request):
     })
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def CrearBoletinBorrador(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     if request.method == 'POST':
         contenido_html = request.POST.get('basic-example', '')  # Asegura un string vacío si es None
         nombre_boletin = request.POST.get('nombre_boletin', 'Borrador sin título')
@@ -288,9 +301,8 @@ def CrearBoletinBorrador(request):
     return render(request, 'bibliotecologos(as)/CrearBoletinBorrador.html')
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def BoletinBorrador_listado(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     form = BusquedaBoletinForm(request.GET or None)
     boletines = BoletinBorrador.objects.all()
     tags_conteo = TagBoletin.objects.all()
@@ -328,10 +340,8 @@ def BoletinBorrador_listado(request):
     })
 
 @login_required(login_url='/Login/')
-def EditarBoletinBorrador(request, id_boletin):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
-    
+@bibliotecologo_required
+def EditarBoletinBorrador(request, id_boletin):  
     boletin = get_object_or_404(BoletinBorrador, id_boletin=id_boletin)
 
     if request.method == 'POST':
@@ -380,13 +390,13 @@ def EditarBoletinBorrador(request, id_boletin):
     })
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def BorrarBoletin(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'Bibliotecologo/a':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     boletines = Boletin.objects.all()
     return render(request, 'bibliotecologos(as)/BorrarBoletin.html', {'boletines' : boletines})
 
 @login_required(login_url='/Login/')
+@bibliotecologo_required
 def BorradoBoletin(request, id_boletin):
     boletin = Boletin.objects.get(id_boletin = id_boletin)
     boletin.delete()
@@ -394,15 +404,15 @@ def BorradoBoletin(request, id_boletin):
 
 #Ingreso fuentes
 @login_required(login_url='/Login/')
+@equipou3i_required
 def IngresarFuente(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags_conteo = TagFuente.objects.all()
     return render(request, 'equipo_u3i/IngresarFuente.html', {
         'tags_conteo': tags_conteo
     })
 
 @login_required(login_url='/Login/')
+@equipou3i_required
 def IngresoFuente(request):
     if request.method == "POST":
         titulo = request.POST['titulo']
@@ -432,9 +442,9 @@ def IngresoFuente(request):
         return redirect('/IngresarFuente/')
     return redirect('/IngresarFuente/')
 
+@login_required(login_url='/Login/')
+@equipou3i_required
 def IngresarTagFuente(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "equipo_u3i/IngresarTagFuente.html")
 
 def IngresoTagFuente(request):
@@ -456,12 +466,16 @@ def IngresoTagFuente(request):
     
     return redirect('/IngresarTagFuente/')
 
+@login_required(login_url='/Login/')
+@equipou3i_required
 def BorrarTagFuente(request):
     if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
         return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     tags = TagFuente.objects.all()
     return render(request, "equipo_u3i/BorrarTagFuente.html",  {"tags": tags})
 
+@login_required(login_url='/Login/')
+@equipou3i_required
 def BorradoTagFuente(request, nombre):
     tag = TagFuente.objects.get(nombre = nombre)
     tag.delete()
@@ -470,13 +484,13 @@ def BorradoTagFuente(request, nombre):
 
 #Modificar fuentes
 @login_required(login_url='/Login/')
+@equipou3i_required
 def ModificarFuente(request, id_fuente):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     fuente = FuentesInfo.objects.get(id_fuente = id_fuente)
     return render(request, "equipo_u3i/ModificarFuente.html", {"fuente": fuente})
 
 @login_required(login_url='/Login/')
+@equipou3i_required
 def EditarFuente(request, id_fuente):
     titulo = request.POST['titulo']
     url = request.POST['url']
@@ -505,20 +519,19 @@ def EditarFuente(request, id_fuente):
     return redirect('/ModificarFuente/' + str(id_fuente) + '/')
 
 #Acceso Bilbiotecolog@s
+@bibliotecologo_required
 @login_required(login_url='/Login/')
 def AccesoBiblio(request):
     return render(request, "bibliotecologos(as)/AccesoBiblio.html")
 
 @login_required(login_url='/Login/')
+@equipou3i_required
 def Estadisticas(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "equipo_u3i/Estadisticas.html")
 
 @login_required(login_url='/Login/')
+@equipou3i_required
 def PanelDeControl(request):
-    if not hasattr(request.user, 'Empleado') or request.user.Empleado.tipo != 'EquipoU3I':
-        return HttpResponseForbidden("No tienes permiso para acceder a esta página.")
     return render(request, "equipo_u3i/PanelDeControl.html")
 
 def Boletines(request):

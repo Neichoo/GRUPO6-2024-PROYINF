@@ -9,4 +9,4 @@ La aplicación recomienda borrar la clave, cambiarla y sacarla del código, por 
 ## Segundo Quality Issue
 ![Quality Issue 2](QI2.png)
 Luego de inspeccionar los issues, no habían errores muy graves, pero si muchos como este que se muestra en la imagen, en donde hay un problema con la mantenibilidad, esto debido a que reduce la eficiencia y escalabilidad del código, además de que puede llevar a inconsistencias si esa línea se quiere cambiar en muchas partes.
-Entonces lo recomendado por la aplicación es crear una constante en lugar de duplicar esa línea en muchos sectores del código, nos parece una buena solución y es lo que haremos.
+Entonces lo recomendado por la aplicación es crear una constante en lugar de duplicar esa línea en muchos sectores del código, nos parece una buena solución, solo que haremos una función para verificar y así solamente la iremos llamando en distintos sectores del código.
